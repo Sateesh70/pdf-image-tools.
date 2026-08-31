@@ -1,1 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DocuFix - Free PDF Merger & Image Compressor</title>
+  <meta name="description" content="Merge multiple PDF files and compress images (JPG, PNG, WebP) directly in your browser. 100% private, fast, and free." />
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- PDF-LIB for client-side PDF merging -->
+  <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col justify-between">
 
+  <!-- Navigation -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+      <div class="flex items-center space-x-2">
+        <div class="w-9 h-9 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-black text-xl">D</div>
+        <span class="text-xl font-bold tracking-tight text-slate-900">Docu<span class="text-indigo-600">Fix</span></span>
+      </div>
+      <nav class="space-x-6 text-sm font-medium text-slate-600">
+        <a href="#pdf-tool" class="hover:text-indigo-600 transition">PDF Merger</a>
+        <a href="#image-tool" class="hover:text-indigo-600 transition">Image Compressor</a>
+        <a href="#faq" class="hover:text-indigo-600 transition">FAQ</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <main class="max-w-4xl mx-auto px-4 py-10 w-full">
+    <div class="text-center mb-10">
+      <h1 class="text-4xl sm:text-5xl font-extrabold text-slate-900 mb-3 tracking-tight">
+        Free Client-Side Document Tools
+      </h1>
+      <p class="text-slate-600 text-lg max-w-xl mx-auto">
+        Fast, secure, and unlimited. Files never leave your browser—zero server uploads.
+      </p>
+    </div>
+
+    <!-- Tool Selector Tabs -->
+    <div class="flex justify-center mb-8">
+      <div class="bg-slate-200 p-1.5 rounded-xl inline-flex space-x-2">
+        <button id="tab-pdf" onclick="switchTool('pdf')" class="px-6 py-2.5 rounded-lg text-sm font-semibold bg-white text-indigo-600 shadow-sm transition">
+          📄 PDF Merger
+        </button>
+        <button id="tab-img" onclick="switchTool('img')" class="px-6 py-2.5 rounded-lg text-sm font-semibold text-slate-600 hover:text-slate-900 transition">
+          🖼️ Image Compressor
+        </button>
+      </div>
+    </div>
+
+    <!-- TOOL 1: PDF MERGER -->
+    <section id="pdf-section" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 mb-12">
+      <h2 class="text-2xl font-bold mb-2">Merge PDF Documents</h2>
+      <p class="text-slate-500 text-sm mb-6">Select two or more PDF files to combine them in order into a single document.</p>
+      
+      <div class="border-2 border-dashed border-slate-300 hover:border-indigo-500 rounded-xl p-8 text-center transition cursor-pointer bg-slate-50" onclick="document.getElementById('pdf-input').click()">
+        <input type="file" id="pdf-input" accept="application/pdf" multiple class="hidden" onchange="handlePdfSelect(event)" />
+        <p class="text-sm font-semibold text-indigo-600">Click to upload or drag & drop PDFs</p>
+        <p class="text-xs text-slate-400 mt-1">Select multiple .pdf files</p>
+      </div>
+
+      <div id="pdf-file-list" class="mt-4 space-y-2"></div>
+
+      <button id="merge-btn" onclick="mergePdfs()" class="mt-6 w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-xl hidden transition">
+        Merge & Download PDF
+      </button>
+      <p id="pdf-status" class="text-sm text-center font-medium mt-3 text-indigo-600 hidden"></p>
+    </section>
+
+    <!-- TOOL 2: IMAGE COMPRESSOR -->
+    <section id="image-section" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 mb-12 hidden">
+      <h2 class="text-2xl font-bold mb-2">Compress & Convert Images</h2>
+      <p class="text-slate-500 text-sm mb-6">Reduce file sizes for JPG, PNG, and WebP while preserving visual quality.</p>
+      
+      <div class="border-2 border-dashed border-slate-300 hover:border-indigo-500 rounded-xl p-8 text-center transition cursor-pointer bg-slate-50" onclick="document.getElementById('img-input').click()">
+        <input type="file" id="img-input" accept="image/png, image/jpeg, image/webp" class="hidden" onchange="handleImageSelect(event)" />
+        <p class="text-sm font-semibold text-indigo-600">Upload an image file</p>
+        <p class="text-xs text-slate-400 mt-1">Supports PNG, JPG, JPEG, and WebP</p>
+      </div>
+
+      <!-- Controls -->
+      <div id="img-controls" class="mt-6 space-y-4 hidden">
+        <div>
+          <div class="flex justify-between text-sm font-medium mb-1">
+            <span>Compression Level (Quality)</span>
+            <span id="quality-val">70%</span>
+          </div>
+          <input type="range" id="quality-range" min="10" max="100" value="70" class="w-full accent-indigo-600" oninput="document.getElementById('quality-val').innerText = this.value + '%'" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium mb-1">Output Format</label>
+          <select id="output-format" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm">
+            <option value="image/jpeg">JPG / JPEG</option>
+            <option value="image/webp">WebP (Best Compression)</option>
+            <option value="image/png">PNG</option>
+          </select>
+        </div>
+
+        <button onclick="compressImage()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-xl transition">
+          Compress Image Now
+        </button>
+
+        <!-- Stats Preview -->
+        <div id="img-result" class="p-4 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between hidden">
+          <div>
+            <p class="text-xs text-slate-500">Original: <span id="orig-size" class="font-bold text-slate-700"></span></p>
+            <p class="text-xs text-slate-500">Compressed: <span id="comp-size" class="font-bold text-emerald-600"></span></p>
+          </div>
+          <a id="img-download-link" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-4 py-2 rounded-lg transition" download="compressed.jpg">
+            Download File
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTENT SECTION (Crucial for AdSense Approval) -->
+    <article class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 space-y-6 text-slate-700 leading-relaxed text-sm">
+      <h3 class="text-xl font-bold text-slate-900">Why Use In-Browser Document Processing?</h3>
+      <p>
+        Traditional online PDF mergers and image compressors require you to upload your sensitive documents and images to remote web servers. This raises data privacy concerns, consumes internet bandwidth, and limits file upload sizes. 
+      </p>
+      <p>
+        DocuFix uses modern WebAssembly and JavaScript standards to process files directly inside your browser memory. This means your private bank statements, contracts, IDs, and photos are never uploaded or stored anywhere.
+      </p>
+      
+      <h4 class="text-lg font-bold text-slate-900 pt-2" id="faq">Frequently Asked Questions</h4>
+      <div class="space-y-3">
+        <div>
+          <p class="font-semibold text-slate-900">Is there any file size limit?</p>
+          <p class="text-slate-600">Because processing depends on your local device RAM and browser capabilities, you can process high-resolution images and large PDFs without cloud storage restrictions.</p>
+        </div>
+        <div>
+          <p class="font-semibold text-slate-900">Which image formats provide the best compression?</p>
+          <p class="text-slate-600">WebP offers up to 30% higher compression efficiency compared to standard JPEG while preserving image sharpness and transparency.</p>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500">
+    <p>© 2026 DocuFix. All rights reserved. | <a href="#" class="underline">Privacy Policy</a> | <a href="#" class="underline">Terms of Service</a></p>
+  </footer>
+
+  <!-- Script Logic -->
+  <script>
+    let selectedPdfFiles = [];
+    let selectedImageFile = null;
+
+    function switchTool(type) {
+      const isPdf = type === 'pdf';
+      document.getElementById('pdf-section').classList.toggle('hidden', !isPdf);
+      document.getElementById('image-section').classList.toggle('hidden', isPdf);
+      
+      document.getElementById('tab-pdf').className = isPdf ? "px-6 py-2.5 rounded-lg text-sm font-semibold bg-white text-indigo-600 shadow-sm transition" : "px-6 py-2.5 rounded-lg text-sm font-semibold text-slate-600 hover:text-slate-900 transition";
+      document.getElementById('tab-img').className = !isPdf ? "px-6 py-2.5 rounded-lg text-sm font-semibold bg-white text-indigo-600 shadow-sm transition" : "px-6 py-2.5 rounded-lg text-sm font-semibold text-slate-600 hover:text-slate-900 transition";
+    }
+
+    // PDF MERGER LOGIC
+    function handlePdfSelect(e) {
+      selectedPdfFiles = Array.from(e.target.files);
+      const list = document.getElementById('pdf-file-list');
+      list.innerHTML = '';
+      if (selectedPdfFiles.length > 0) {
+        selectedPdfFiles.forEach((file, index) => {
+          list.innerHTML += `<div class="text-xs bg-slate-100 p-2 rounded flex justify-between"><span>📄 ${file.name}</span><span class="text-slate-500">${(file.size / 1024).toFixed(1)} KB</span></div>`;
+        });
+        document.getElementById('merge-btn').classList.remove('hidden');
+      }
+    }
+
+    async function mergePdfs() {
+      if (selectedPdfFiles.length < 2) {
+        alert("Please select at least 2 PDF files to merge.");
+        return;
+      }
+      const status = document.getElementById('pdf-status');
+      status.innerText = "Merging PDFs in browser...";
+      status.classList.remove('hidden');
+
+      const mergedPdf = await PDFLib.PDFDocument.create();
+
+      for (const file of selectedPdfFiles) {
+        const fileBytes = await file.arrayBuffer();
+        const pdf = await PDFLib.PDFDocument.load(fileBytes);
+        const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+        copiedPages.forEach((page) => mergedPdf.addPage(page));
+      }
+
+      const mergedPdfBytes = await mergedPdf.save();
+      const blob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
+      const url = URL.createObjectURL(blob);
+      
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `merged-document-${Date.now()}.pdf`;
+      a.click();
+      
+      status.innerText = "✅ Download Complete!";
+    }
+
+    // IMAGE COMPRESSOR LOGIC
+    function handleImageSelect(e) {
+      selectedImageFile = e.target.files[0];
+      if (selectedImageFile) {
+        document.getElementById('img-controls').classList.remove('hidden');
+        document.getElementById('orig-size').innerText = (selectedImageFile.size / 1024).toFixed(1) + " KB";
+      }
+    }
+
+    function compressImage() {
+      if (!selectedImageFile) return;
+
+      const quality = parseFloat(document.getElementById('quality-range').value) / 100;
+      const format = document.getElementById('output-format').value;
+      const reader = new FileReader();
+
+      reader.onload = function(event) {
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          canvas.width = img.width;
+          canvas.height = img.height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0);
+
+          canvas.toBlob((blob) => {
+            const resultBox = document.getElementById('img-result');
+            const compSize = document.getElementById('comp-size');
+            const downloadLink = document.getElementById('img-download-link');
+
+            compSize.innerText = (blob.size / 1024).toFixed(1) + " KB";
+            downloadLink.href = URL.createObjectURL(blob);
+            
+            const ext = format === 'image/webp' ? '.webp' : (format === 'image/png' ? '.png' : '.jpg');
+            downloadLink.download = `compressed-${Date.now()}${ext}`;
+
+            resultBox.classList.remove('hidden');
+          }, format, quality);
+        };
+        img.src = event.target.result;
+      };
+      reader.readAsDataURL(selectedImageFile);
+    }
+  </script>
+</body>
+</html>
