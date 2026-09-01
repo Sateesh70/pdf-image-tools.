@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://instantfiletools.online/sitemap.xml
