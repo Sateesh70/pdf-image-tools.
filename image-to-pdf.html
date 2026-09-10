@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="google-adsense-account" content="ca-pub-6682141621893299">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-X7C20RQ87W"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-X7C20RQ87W');
+  </script>
+
+  <title>Images to PDF Converter - Convert JPG & PNG to PDF Privately</title>
+  <meta name="description" content="Combine and convert multiple JPG, PNG, and WebP pictures into a neat PDF document directly in your browser. 100% private, no server uploads, and no watermarks." />
+  <meta name="keywords" content="image to pdf, jpg to pdf, png to pdf, convert photos to pdf, bundle images into pdf, client side pdf converter" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .drop-active { border-color: #4f46e5 !important; background-color: #eef2ff !important; }
+    .glass-nav { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "InstantFileTools - Images to PDF",
+    "url": "https://instantfiletools.online/img-to-pdf.html",
+    "description": "Convert and package images into a clean PDF document directly in the browser.",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "All",
+    "offers": { "@type": "Offer", "price": "0" }
+  }
+  </script>
+</head>
+<body class="bg-[#f8fafc] text-slate-800 min-h-screen flex flex-col justify-between selection:bg-indigo-600 selection:text-white">
+
+  <!-- Privacy Ribbon -->
+  <div class="bg-indigo-950 text-indigo-200 text-xs py-2.5 px-4 text-center font-medium border-b border-indigo-900">
+    🔒 <strong>100% In-Browser Execution:</strong> Photos are combined into PDF format directly inside device memory without cloud transfers.
+  </div>
+
+  <header class="sticky top-0 z-50 bg-white/90 glass-nav border-b border-slate-200/80 transition-all">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex justify-between items-center">
+      <a href="/" class="flex items-center space-x-3 group">
+        <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-extrabold text-xl shadow-md shadow-indigo-200 group-hover:scale-105 transition">I</div>
+        <div>
+          <span class="text-xl font-extrabold tracking-tight text-slate-900">InstantFile<span class="text-indigo-600">Tools</span></span>
+          <span class="block text-[10px] text-slate-400 font-semibold tracking-wider uppercase">Local Privacy Suite</span>
+        </div>
+      </a>
+      <nav class="hidden sm:flex items-center space-x-6 text-sm font-semibold text-slate-600">
+        <a href="/merge-pdf.html" class="hover:text-indigo-600 transition">Merge PDF</a>
+        <a href="/split-pdf.html" class="hover:text-indigo-600 transition">Split PDF</a>
+        <a href="/compress-pdf.html" class="hover:text-indigo-600 transition">Compress PDF</a>
+        <a href="/img-to-pdf.html" class="text-indigo-600 font-bold">Image to PDF</a>
+        <a href="/compress-image.html" class="hover:text-indigo-600 transition">Compress Image</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 pt-10 pb-16 w-full flex-1">
+    <div class="text-center max-w-2xl mx-auto mb-8">
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-100 mb-4">
+        ⚡ Zero Upload Delays • Instant Multi-Page PDF Creation
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+        Convert Images to PDF <span class="text-indigo-600">Privately</span>
+      </h1>
+      <p class="text-slate-500 text-sm mt-2">
+        Turn photos, receipts, or scans into a structured multi-page PDF document without uploading files to remote servers.
+      </p>
+    </div>
+
+    <!-- Images to PDF Workspace -->
+    <div class="bg-white rounded-3xl shadow-xl shadow-slate-200/60 border border-slate-200/80 p-6 sm:p-10">
+      <div id="dropzone" class="border-2 border-dashed border-slate-300 hover:border-indigo-500 rounded-2xl p-10 text-center bg-slate-50/50 cursor-pointer transition flex flex-col items-center justify-center gap-2 group" onclick="document.getElementById('file-input').click()">
+        <input type="file" id="file-input" accept="image/jpeg, image/png, image/webp" multiple class="hidden" onchange="handleImageFiles(event)" />
+        <div class="w-14 h-14 rounded-full bg-white shadow-sm flex items-center justify-center text-2xl group-hover:scale-110 transition">📦</div>
+        <p class="text-sm font-bold text-slate-800">Drop images here, or <span class="text-indigo-600 underline">browse</span></p>
+        <p class="text-xs text-slate-400">Select multiple JPG, PNG, or WebP files</p>
+      </div>
+
+      <!-- Controls & Card Grid -->
+      <div id="controls" class="mt-6 space-y-6 hidden">
+        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <p class="text-xs font-bold text-slate-800" id="info-count">0 Images Selected</p>
+            <p class="text-[11px] text-slate-400 mt-0.5">Use arrows to adjust page ordering</p>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <div>
+              <label class="text-[11px] font-bold text-slate-600 mr-1.5">Page Fit:</label>
+              <select id="pdf-fit" class="border border-slate-300 bg-white rounded-xl px-2.5 py-1.5 text-xs font-semibold focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                <option value="fit-page">Fit to A4 (With Margins)</option>
+                <option value="fill-page">Exact Image Dimensions</option>
+              </select>
+            </div>
+            <button onclick="document.getElementById('file-input').click()" class="px-3 py-1.5 border border-slate-300 bg-white hover:bg-slate-50 rounded-xl text-xs font-bold text-slate-700 transition">
+              + Add More
+            </button>
+          </div>
+        </div>
+
+        <!-- Visual Reordering Grid -->
+        <div id="image-cards-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-h-[460px] overflow-y-auto p-1"></div>
+
+        <button onclick="executeImgToPdf()" class="w-full bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] text-white font-bold py-3.5 px-6 rounded-xl transition text-sm shadow-lg shadow-indigo-200 flex items-center justify-center gap-2">
+          <span>Generate & Download PDF</span>
+        </button>
+        <p id="status-msg" class="text-center text-xs font-semibold text-indigo-600 hidden"></p>
+      </div>
+    </div>
+
+    <!-- Editorial Scaffolding Section -->
+    <article class="mt-12 bg-white rounded-3xl border border-slate-200/80 p-8 sm:p-10 space-y-6 text-slate-600 text-sm leading-relaxed">
+      <h2 class="text-2xl font-bold text-slate-900">How to Convert Images to PDF Locally</h2>
+      <ol class="list-decimal pl-5 space-y-2 text-xs sm:text-sm">
+        <li><strong>Select Photos:</strong> Upload one or multiple pictures (JPG, PNG, WebP) from your smartphone or computer.</li>
+        <li><strong>Organize Page Order:</strong> Rearrange cards using the left (◀) and right (▶) controls to establish the intended multi-page sequence.</li>
+        <li><strong>Generate Document:</strong> Choose whether to scale photos to standard A4 sheets or preserve original aspect ratios, then click <em>Generate & Download PDF</em>.</li>
+      </ol>
+
+      <h3 class="text-lg font-bold text-slate-900 pt-4 border-t border-slate-100">Why Use In-Browser Image Conversion?</h3>
+      <p>
+        Submitting photo scans of ID cards, educational certificates, utility bills, and financial receipts to remote web servers creates privacy risks. Many cloud platforms retain uploads on temporary staging drives or run automated background indexing.
+      </p>
+      <p>
+        InstantFileTools runs binary image transcoding via <code>pdf-lib</code> and the HTML5 Canvas API in your browser. The graphics pipeline reads image dimensions, computes proportional coordinates, and writes the byte array directly into an unencrypted PDF container in device RAM.
+      </p>
+
+      <h3 class="text-lg font-bold text-slate-900 pt-4 border-t border-slate-100">Frequently Asked Questions</h3>
+      <div class="space-y-3 text-xs sm:text-sm">
+        <div>
+          <p class="font-semibold text-slate-900">Can I mix JPG and PNG files in the same PDF?</p>
+          <p class="text-xs text-slate-500 mt-1">Yes. You can add JPGs, transparent PNGs, and modern WebP files together. Each image is encoded as a discrete page stream.</p>
+        </div>
+        <div>
+          <p class="font-semibold text-slate-900">Is there a limit on how many images I can bundle?</p>
+          <p class="text-xs text-slate-500 mt-1">There are no synthetic limits. You can bundle dozens of images as long as your device has sufficient free memory.</p>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <footer class="bg-white border-t border-slate-200 py-6 text-xs text-slate-500 text-center">
+    <div class="max-w-4xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+      <span>© 2026 InstantFileTools. All rights reserved.</span>
+      <div class="space-x-4">
+        <a href="/privacy.html" class="hover:text-indigo-600">Privacy Policy</a>
+        <a href="/terms.html" class="hover:text-indigo-600">Terms of Use</a>
+        <a href="/contact.html" class="hover:text-indigo-600">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    let imageFiles = [];
+
+    function setupDropzone() {
+      const zone = document.getElementById('dropzone');
+      const input = document.getElementById('file-input');
+      ['dragenter', 'dragover'].forEach(n => zone.addEventListener(n, e => { e.preventDefault(); zone.classList.add('drop-active'); }));
+      ['dragleave', 'drop'].forEach(n => zone.addEventListener(n, e => { e.preventDefault(); zone.classList.remove('drop-active'); }));
+      zone.addEventListener('drop', e => {
+        if (e.dataTransfer.files.length) {
+          input.files = e.dataTransfer.files;
+          handleImageFiles({ target: input });
+        }
+      });
+    }
+    setupDropzone();
+
+    function handleImageFiles(e) {
+      const incoming = Array.from(e.target.files).filter(f => f.type.startsWith('image/'));
+      imageFiles = imageFiles.concat(incoming);
+      renderCards();
+    }
+
+    function renderCards() {
+      const grid = document.getElementById('image-cards-grid');
+      const controls = document.getElementById('controls');
+      const dropzone = document.getElementById('dropzone');
+      const countLabel = document.getElementById('info-count');
+
+      if (!imageFiles.length) {
+        controls.classList.add('hidden');
+        dropzone.classList.remove('hidden');
+        return;
+      }
+
+      dropzone.classList.add('hidden');
+      controls.classList.remove('hidden');
+      countLabel.innerText = `${imageFiles.length} Image${imageFiles.length === 1 ? '' : 's'} Selected`;
+      grid.innerHTML = '';
+
+      imageFiles.forEach((file, index) => {
+        const previewUrl = URL.createObjectURL(file);
+        const card = document.createElement('div');
+        card.className = "bg-slate-50 border border-slate-200 rounded-2xl p-3 flex flex-col justify-between shadow-sm hover:shadow transition";
+        card.innerHTML = `
+          <div>
+            <div class="flex justify-between items-center text-[10px] font-bold text-slate-500 mb-2">
+              <span class="bg-indigo-100 text-indigo-700 px-1.5 py-0.5 rounded">Page ${index + 1}</span>
+              <button onclick="removeImage(${index})" class="text-slate-400 hover:text-red-600 font-bold text-xs">✕</button>
+            </div>
+            <img src="${previewUrl}" class="w-full h-28 object-cover rounded-lg border border-slate-200 bg-white mb-2" />
+            <p class="text-[11px] font-semibold text-slate-800 truncate" title="${file.name}">${file.name}</p>
+            <p class="text-[10px] text-slate-400 font-mono">${(file.size / 1024).toFixed(1)} KB</p>
+          </div>
+          <div class="flex justify-between items-center pt-2 border-t border-slate-200 mt-2">
+            <button onclick="shiftImage(${index}, -1)" ${index === 0 ? 'disabled class="text-slate-300"' : 'class="text-indigo-600 font-bold hover:text-indigo-800 text-xs"'}>◀</button>
+            <span class="text-[9px] uppercase font-bold text-slate-400">Order</span>
+            <button onclick="shiftImage(${index}, 1)" ${index === imageFiles.length - 1 ? 'disabled class="text-slate-300"' : 'class="text-indigo-600 font-bold hover:text-indigo-800 text-xs"'}>▶</button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function shiftImage(idx, dir) {
+      const target = idx + dir;
+      if (target < 0 || target >= imageFiles.length) return;
+      const item = imageFiles.splice(idx, 1)[0];
+      imageFiles.splice(target, 0, item);
+      renderCards();
+    }
+
+    function removeImage(idx) {
+      imageFiles.splice(idx, 1);
+      renderCards();
+    }
+
+    // Helper: convert any image (including WebP) to JPG/PNG data URL via canvas
+    function fileToCanvasJpeg(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = e => {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
+            // White background for transparent PNGs
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0);
+            const jpegDataUrl = canvas.toDataURL('image/jpeg', 0.92);
+            resolve({ dataUrl: jpegDataUrl, width: img.width, height: img.height });
+          };
+          img.onerror = reject;
+          img.src = e.target.result;
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function executeImgToPdf() {
+      if (!imageFiles.length) return;
+      const status = document.getElementById('status-msg');
+      status.innerText = "Building PDF pages in memory...";
+      status.classList.remove('hidden');
+
+      try {
+        const pdfDoc = await PDFLib.PDFDocument.create();
+        const fitChoice = document.getElementById('pdf-fit').value;
+
+        for (const file of imageFiles) {
+          const { dataUrl, width, height } = await fileToCanvasJpeg(file);
+          const embeddedImage = await pdfDoc.embedJpg(dataUrl);
+
+          if (fitChoice === 'fill-page') {
+            // Page size matches image aspect exactly
+            const page = pdfDoc.addPage([width, height]);
+            page.drawImage(embeddedImage, { x: 0, y: 0, width, height });
+          } else {
+            // Standard A4 dimensions: 595.28 x 841.89 points
+            const a4Width = 595.28;
+            const a4Height = 841.89;
+            const margin = 36; // 0.5 inch margins
+
+            const page = pdfDoc.addPage([a4Width, a4Height]);
+            const maxW = a4Width - (margin * 2);
+            const maxH = a4Height - (margin * 2);
+
+            const scale = Math.min(maxW / width, maxH / height);
+            const drawW = width * scale;
+            const drawH = height * scale;
+
+            // Center image on page
+            const x = (a4Width - drawW) / 2;
+            const y = (a4Height - drawH) / 2;
+
+            page.drawImage(embeddedImage, { x, y, width: drawW, height: drawH });
+          }
+        }
+
+        const pdfBytes = await pdfDoc.save();
+        const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `images-bundle-${Date.now()}.pdf`;
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        status.innerText = "✅ PDF generated and downloaded successfully!";
+      } catch (err) {
+        status.innerText = "Failed to bundle images into PDF.";
+      }
+    }
+  </script>
+</body>
+</html>
