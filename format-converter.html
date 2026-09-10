@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="google-adsense-account" content="ca-pub-6682141621893299">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-X7C20RQ87W"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-X7C20RQ87W');
+  </script>
+
+  <title>Image Format Converter - Convert JPG, PNG & WebP Privately</title>
+  <meta name="description" content="Convert pictures between WebP, JPG, and PNG formats locally in your browser. 100% private image conversion without cloud uploads or quality degradation." />
+  <meta name="keywords" content="image format converter, convert png to jpg, convert webp to png, convert jpg to webp, free image converter, client side image converter" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .drop-active { border-color: #4f46e5 !important; background-color: #eef2ff !important; }
+    .glass-nav { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "InstantFileTools - Image Format Converter",
+    "url": "https://instantfiletools.online/format-converter.html",
+    "description": "Convert images across WebP, PNG, and JPG locally in device memory.",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "All",
+    "offers": { "@type": "Offer", "price": "0" }
+  }
+  </script>
+</head>
+<body class="bg-[#f8fafc] text-slate-800 min-h-screen flex flex-col justify-between selection:bg-indigo-600 selection:text-white">
+
+  <!-- Privacy Ribbon -->
+  <div class="bg-indigo-950 text-indigo-200 text-xs py-2.5 px-4 text-center font-medium border-b border-indigo-900">
+    🔒 <strong>100% In-Browser Transcoding:</strong> Graphics conversion runs directly on your device GPU/CPU. Images are never uploaded.
+  </div>
+
+  <header class="sticky top-0 z-50 bg-white/90 glass-nav border-b border-slate-200/80 transition-all">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex justify-between items-center">
+      <a href="/" class="flex items-center space-x-3 group">
+        <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-extrabold text-xl shadow-md shadow-indigo-200 group-hover:scale-105 transition">I</div>
+        <div>
+          <span class="text-xl font-extrabold tracking-tight text-slate-900">InstantFile<span class="text-indigo-600">Tools</span></span>
+          <span class="block text-[10px] text-slate-400 font-semibold tracking-wider uppercase">Local Privacy Suite</span>
+        </div>
+      </a>
+      <nav class="hidden sm:flex items-center space-x-6 text-sm font-semibold text-slate-600">
+        <a href="/merge-pdf.html" class="hover:text-indigo-600 transition">Merge PDF</a>
+        <a href="/split-pdf.html" class="hover:text-indigo-600 transition">Split PDF</a>
+        <a href="/compress-pdf.html" class="hover:text-indigo-600 transition">Compress PDF</a>
+        <a href="/format-converter.html" class="text-indigo-600 font-bold">Convert Image</a>
+        <a href="/compress-image.html" class="hover:text-indigo-600 transition">Compress Image</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 pt-10 pb-16 w-full flex-1">
+    <div class="text-center max-w-2xl mx-auto mb-8">
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-100 mb-4">
+        ⚡ GPU-Accelerated Transcoding • Zero Network Lag
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+        Image Format Converter <span class="text-indigo-600">Privately</span>
+      </h1>
+      <p class="text-slate-500 text-sm mt-2">
+        Switch instantly between modern WebP, standard JPG, and transparent PNG without cloud uploads.
+      </p>
+    </div>
+
+    <!-- Converter Workspace -->
+    <div class="bg-white rounded-3xl shadow-xl shadow-slate-200/60 border border-slate-200/80 p-6 sm:p-10">
+      <div id="dropzone" class="border-2 border-dashed border-slate-300 hover:border-indigo-500 rounded-2xl p-10 text-center bg-slate-50/50 cursor-pointer transition flex flex-col items-center justify-center gap-2 group" onclick="document.getElementById('file-input').click()">
+        <input type="file" id="file-input" accept="image/*" class="hidden" onchange="onFileSelected(event)" />
+        <div class="w-14 h-14 rounded-full bg-white shadow-sm flex items-center justify-center text-2xl group-hover:scale-110 transition">🔁</div>
+        <p class="text-sm font-bold text-slate-800">Drop an image here, or <span class="text-indigo-600 underline">browse</span></p>
+        <p id="file-label" class="text-xs text-slate-400">Supports PNG, JPG, JPEG, and WebP</p>
+      </div>
+
+      <div id="controls" class="mt-6 space-y-6 hidden bg-slate-50 p-6 rounded-2xl border border-slate-200">
+        <!-- Image Info Overview -->
+        <div class="flex items-center justify-between p-3.5 bg-white border border-slate-200 rounded-xl">
+          <div>
+            <p class="text-xs font-bold text-slate-800" id="info-filename">photo.png</p>
+            <p class="text-[11px] text-slate-400 mt-0.5" id="info-dimensions">Dimensions: 0 x 0 px</p>
+          </div>
+          <span class="text-xs font-mono font-bold text-slate-700 bg-slate-100 px-2.5 py-1 rounded-lg" id="info-origsize">0 KB</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1.5">Convert To:</label>
+            <select id="target-format" onchange="onFormatChange()" class="w-full border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white font-medium">
+              <option value="image/webp" selected>WebP (.webp) - Modern & Lightweight</option>
+              <option value="image/jpeg">JPG / JPEG (.jpg) - Universal Standard</option>
+              <option value="image/png">PNG (.png) - Lossless Alpha Transparency</option>
+            </select>
+          </div>
+
+          <div id="quality-container">
+            <div class="flex justify-between items-center text-xs font-bold text-slate-700 mb-1.5">
+              <span>Encoding Quality</span>
+              <span id="quality-label" class="text-indigo-600 font-mono">92%</span>
+            </div>
+            <input type="range" id="quality-slider" min="10" max="100" value="92" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600" oninput="document.getElementById('quality-label').innerText = this.value + '%'" />
+          </div>
+        </div>
+
+        <button onclick="executeFormatConvert()" class="w-full bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] text-white font-bold py-3.5 px-6 rounded-xl transition text-sm shadow-lg shadow-indigo-200 flex items-center justify-center gap-2">
+          <span>Convert & Save Image</span>
+        </button>
+
+        <div id="result-box" class="p-4 bg-white border border-slate-200 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4 hidden">
+          <div class="flex items-center gap-3">
+            <img id="thumb-preview" class="w-14 h-14 object-cover rounded-lg border border-slate-200" />
+            <div>
+              <p class="text-xs text-slate-500">Original: <span id="res-orig-size" class="font-bold text-slate-800"></span></p>
+              <p class="text-xs text-slate-500">Converted: <span id="res-final-size" class="font-extrabold text-emerald-600 text-sm"></span></p>
+            </div>
+          </div>
+          <a id="dl-btn" class="w-full sm:w-auto text-center bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-5 py-3 rounded-xl transition shadow-md shadow-emerald-200" download="converted-image">
+            Download Converted Image
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Editorial Scaffolding Section -->
+    <article class="mt-12 bg-white rounded-3xl border border-slate-200/80 p-8 sm:p-10 space-y-6 text-slate-600 text-sm leading-relaxed">
+      <h2 class="text-2xl font-bold text-slate-900">How In-Browser Image Format Conversion Works</h2>
+      <p>
+        Modern digital formats serve distinct web and design purposes:
+      </p>
+      <ul class="list-disc pl-5 space-y-1.5 text-xs sm:text-sm">
+        <li><strong>WebP:</strong> Developed by Google, WebP provides 25%–34% higher compression ratios compared to standard JPEG while supporting full 24-bit RGB with alpha transparency.</li>
+        <li><strong>JPG / JPEG:</strong> The global standard for photographs and hardware compatibility across all desktop, mobile, and legacy printing devices.</li>
+        <li><strong>PNG:</strong> Lossless compression engineered for graphics, screenshots, logos, and vector illustrations that demand sharp pixel clarity without compression artifacts.</li>
+      </ul>
+
+      <h3 class="text-lg font-bold text-slate-900 pt-4 border-t border-slate-100">Why Client-Side Conversion is Superior</h3>
+      <p>
+        Most web-based image converters transmit your images to third-party cloud servers where they are processed by shell scripts and queued for redownload.
+      </p>
+      <p>
+        InstantFileTools runs on the native HTML5 Canvas 2D engine inside your web browser. The image is parsed directly into an offscreen frame buffer. When you select a destination format, the browser's built-in encoder writes the appropriate binary container directly into a local Blob URL, eliminating server-side queues and preserving privacy.
+      </p>
+
+      <h3 class="text-lg font-bold text-slate-900 pt-4 border-t border-slate-100">Frequently Asked Questions</h3>
+      <div class="space-y-3 text-xs sm:text-sm">
+        <div>
+          <p class="font-semibold text-slate-900">What happens to transparent PNG backgrounds when converting to JPG?</p>
+          <p class="text-xs text-slate-500 mt-1">Because the JPEG standard does not include an alpha transparency channel, transparent regions are automatically filled with clean white background pixels to prevent black border artifacts.</p>
+        </div>
+        <div>
+          <p class="font-semibold text-slate-900">Does converting WebP to PNG increase file size?</p>
+          <p class="text-xs text-slate-500 mt-1">Yes, PNG is an uncompressed or lossless format. Converting a highly compressed WebP into PNG decompresses the bitmap into lossless pixel tables, increasing total KB weight while restoring maximum editing flexibility.</p>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <footer class="bg-white border-t border-slate-200 py-6 text-xs text-slate-500 text-center">
+    <div class="max-w-4xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+      <span>© 2026 InstantFileTools. All rights reserved.</span>
+      <div class="space-x-4">
+        <a href="/privacy.html" class="hover:text-indigo-600">Privacy Policy</a>
+        <a href="/terms.html" class="hover:text-indigo-600">Terms of Use</a>
+        <a href="/contact.html" class="hover:text-indigo-600">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    let activeFile = null;
+    let loadedImg = null;
+
+    function setupDropzone() {
+      const zone = document.getElementById('dropzone');
+      const input = document.getElementById('file-input');
+      ['dragenter', 'dragover'].forEach(n => zone.addEventListener(n, e => { e.preventDefault(); zone.classList.add('drop-active'); }));
+      ['dragleave', 'drop'].forEach(n => zone.addEventListener(n, e => { e.preventDefault(); zone.classList.remove('drop-active'); }));
+      zone.addEventListener('drop', e => {
+        if (e.dataTransfer.files.length) {
+          input.files = e.dataTransfer.files;
+          onFileSelected({ target: input });
+        }
+      });
+    }
+    setupDropzone();
+
+    function onFormatChange() {
+      const format = document.getElementById('target-format').value;
+      const qualityBox = document.getElementById('quality-container');
+      // PNG is lossless; quality slider is only relevant for WebP and JPEG
+      if (format === 'image/png') {
+        qualityBox.classList.add('opacity-40', 'pointer-events-none');
+      } else {
+        qualityBox.classList.remove('opacity-40', 'pointer-events-none');
+      }
+    }
+
+    function onFileSelected(e) {
+      activeFile = e.target.files[0];
+      if (!activeFile) return;
+
+      document.getElementById('file-label').innerText = activeFile.name;
+      document.getElementById('info-filename').innerText = activeFile.name;
+      document.getElementById('info-origsize').innerText = (activeFile.size / 1024).toFixed(1) + " KB";
+
+      const reader = new FileReader();
+      reader.onload = evt => {
+        loadedImg = new Image();
+        loadedImg.onload = () => {
+          document.getElementById('info-dimensions').innerText = `Dimensions: ${loadedImg.width} x ${loadedImg.height} px`;
+          document.getElementById('controls').classList.remove('hidden');
+          document.getElementById('result-box').classList.add('hidden');
+        };
+        loadedImg.src = evt.target.result;
+      };
+      reader.readAsDataURL(activeFile);
+    }
+
+    function executeFormatConvert() {
+      if (!loadedImg || !activeFile) return;
+
+      const targetMime = document.getElementById('target-format').value;
+      const quality = parseFloat(document.getElementById('quality-slider').value) / 100;
+      const canvas = document.createElement('canvas');
+      canvas.width = loadedImg.width;
+      canvas.height = loadedImg.height;
+      const ctx = canvas.getContext('2d');
+
+      // If converting to JPEG, render white background to avoid black transparency fill
+      if (targetMime === 'image/jpeg') {
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      }
+
+      ctx.drawImage(loadedImg, 0, 0);
+
+      canvas.toBlob(blob => {
+        const ext = targetMime === 'image/webp' ? 'webp' : (targetMime === 'image/jpeg' ? 'jpg' : 'png');
+        const dlBtn = document.getElementById('dl-btn');
+        const preview = document.getElementById('thumb-preview');
+        const url = URL.createObjectURL(blob);
+
+        dlBtn.href = url;
+        const cleanName = activeFile.name.substring(0, activeFile.name.lastIndexOf('.')) || activeFile.name;
+        dlBtn.download = `${cleanName}-converted.${ext}`;
+
+        preview.src = url;
+        document.getElementById('res-orig-size').innerText = (activeFile.size / 1024).toFixed(1) + " KB";
+        document.getElementById('res-final-size').innerText = (blob.size / 1024).toFixed(1) + " KB";
+        document.getElementById('result-box').classList.remove('hidden');
+      }, targetMime, quality);
+    }
+  </script>
+</body>
+</html>
