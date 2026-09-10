@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="google-adsense-account" content="ca-pub-6682141621893299">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-X7C20RQ87W"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-X7C20RQ87W');
+  </script>
+
+  <title>Watermark PDF Online - Add Text Watermarks Privately in Browser</title>
+  <meta name="description" content="Add custom text watermarks to your PDF documents locally in your browser. Choose opacity, rotation, and size with zero cloud uploads and total privacy." />
+  <meta name="keywords" content="watermark pdf, stamp pdf, add text to pdf, confidential watermark, draft watermark pdf, client side pdf tools" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .drop-active { border-color: #4f46e5 !important; background-color: #eef2ff !important; }
+    .glass-nav { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "InstantFileTools - Watermark PDF",
+    "url": "https://instantfiletools.online/watermark-pdf.html",
+    "description": "Free client-side tool to stamp custom text watermarks across PDF pages in local memory.",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "All",
+    "offers": { "@type": "Offer", "price": "0" }
+  }
+  </script>
+</head>
+<body class="bg-[#f8fafc] text-slate-800 min-h-screen flex flex-col justify-between selection:bg-indigo-600 selection:text-white">
+
+  <!-- Privacy Ribbon -->
+  <div class="bg-indigo-950 text-indigo-200 text-xs py-2.5 px-4 text-center font-medium border-b border-indigo-900">
+    🔒 <strong>100% In-Browser Execution:</strong> Text stamps are drawn locally into PDF byte streams. No files are uploaded.
+  </div>
+
+  <header class="sticky top-0 z-50 bg-white/90 glass-nav border-b border-slate-200/80 transition-all">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex justify-between items-center">
+      <a href="/" class="flex items-center space-x-3 group">
+        <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-extrabold text-xl shadow-md shadow-indigo-200 group-hover:scale-105 transition">I</div>
+        <div>
+          <span class="text-xl font-extrabold tracking-tight text-slate-900">InstantFile<span class="text-indigo-600">Tools</span></span>
+          <span class="block text-[10px] text-slate-400 font-semibold tracking-wider uppercase">Local Privacy Suite</span>
+        </div>
+      </a>
+      <nav class="hidden sm:flex items-center space-x-6 text-sm font-semibold text-slate-600">
+        <a href="/merge-pdf.html" class="hover:text-indigo-600 transition">Merge PDF</a>
+        <a href="/split-pdf.html" class="hover:text-indigo-600 transition">Split PDF</a>
+        <a href="/compress-pdf.html" class="hover:text-indigo-600 transition">Compress PDF</a>
+        <a href="/watermark-pdf.html" class="text-indigo-600 font-bold">Watermark PDF</a>
+        <a href="/compress-image.html" class="hover:text-indigo-600 transition">Compress Image</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 pt-10 pb-16 w-full flex-1">
+    <div class="text-center max-w-2xl mx-auto mb-8">
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-100 mb-4">
+        ⚡ In-Memory Vector Overlay • Zero Cloud Footprint
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+        Watermark PDF Files <span class="text-indigo-600">Privately</span>
+      </h1>
+      <p class="text-slate-500 text-sm mt-2">
+        Add custom confidentiality stamps, copyright notices, or draft watermarks without uploading documents to remote servers.
+      </p>
+    </div>
+
+    <!-- Watermark Workspace -->
+    <div class="bg-white rounded-3xl shadow-xl shadow-slate-200/60 border border-slate-200/80 p-6 sm:p-10">
+      <div id="dropzone" class="border-2 border-dashed border-slate-300 hover:border-indigo-500 rounded-2xl p-10 text-center bg-slate-50/50 cursor-pointer transition flex flex-col items-center justify-center gap-2 group" onclick="document.getElementById('file-input').click()">
+        <input type="file" id="file-input" accept="application/pdf" class="hidden" onchange="onPdfSelected(event)" />
+        <div class="w-14 h-14 rounded-full bg-white shadow-sm flex items-center justify-center text-2xl group-hover:scale-110 transition">🖋️</div>
+        <p class="text-sm font-bold text-slate-800">Drop a PDF file here, or <span class="text-indigo-600 underline">browse</span></p>
+        <p id="file-label" class="text-xs text-slate-400">Process PDF files of any page length</p>
+      </div>
+
+      <div id="controls" class="mt-6 space-y-6 hidden bg-slate-50 p-6 rounded-2xl border border-slate-200">
+        <!-- File Info Badge -->
+        <div class="flex items-center justify-between p-3.5 bg-white border border-slate-200 rounded-xl">
+          <div>
+            <p class="text-xs font-bold text-slate-800" id="info-filename">document.pdf</p>
+            <p class="text-[11px] text-slate-400 mt-0.5" id="info-pagecount">0 Pages</p>
+          </div>
+          <span class="text-xs font-mono font-bold text-slate-700 bg-slate-100 px-2.5 py-1 rounded-lg" id="info-filesize">0 KB</span>
+        </div>
+
+        <!-- Customization Options -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="sm:col-span-2">
+            <label class="block text-xs font-bold text-slate-700 mb-1.5">Watermark Text:</label>
+            <input type="text" id="watermark-text" value="CONFIDENTIAL" placeholder="e.g. CONFIDENTIAL, DRAFT, SAMPLE" class="w-full border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white uppercase tracking-wider" />
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1.5">Stamp Orientation:</label>
+            <select id="watermark-angle" class="w-full border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white">
+              <option value="45">Diagonal (45° Upwards)</option>
+              <option value="0">Horizontal (0° Center)</option>
+              <option value="-45">Diagonal (-45° Downwards)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1.5">Text Color:</label>
+            <select id="watermark-color" class="w-full border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white">
+              <option value="red">Warning Red</option>
+              <option value="gray" selected>Subtle Gray</option>
+              <option value="blue">Corporate Blue</option>
+            </select>
+          </div>
+
+          <div>
+            <div class="flex justify-between items-center text-xs font-bold text-slate-700 mb-1.5">
+              <span>Font Size</span>
+              <span id="label-size" class="text-indigo-600 font-mono">48 px</span>
+            </div>
+            <input type="range" id="watermark-size" min="20" max="96" value="48" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600" oninput="document.getElementById('label-size').innerText = this.value + ' px'" />
+          </div>
+
+          <div>
+            <div class="flex justify-between items-center text-xs font-bold text-slate-700 mb-1.5">
+              <span>Transparency (Opacity)</span>
+              <span id="label-opacity" class="text-indigo-600 font-mono">25%</span>
+            </div>
+            <input type="range" id="watermark-opacity" min="5" max="80" value="25" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600" oninput="document.getElementById('label-opacity').innerText = this.value + '%'" />
+          </div>
+        </div>
+
+        <button onclick="executeWatermark()" class="w-full bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] text-white font-bold py-3.5 px-6 rounded-xl transition text-sm shadow-lg shadow-indigo-200 flex items-center justify-center gap-2">
+          <span>Apply Watermark & Download PDF</span>
+        </button>
+        <p id="status-msg" class="text-center text-xs font-semibold text-indigo-600 hidden"></p>
+      </div>
+    </div>
+
+    <!-- Editorial Scaffolding Section -->
+    <article class="mt-12 bg-white rounded-3xl border border-slate-200/80 p-8 sm:p-10 space-y-6 text-slate-600 text-sm leading-relaxed">
+      <h2 class="text-2xl font-bold text-slate-900">How to Watermark PDF Documents Online</h2>
+      <ol class="list-decimal pl-5 space-y-2 text-xs sm:text-sm">
+        <li><strong>Select Document:</strong> Drag and drop your PDF into the upload zone or choose a file from your device.</li>
+        <li><strong>Customize Stamp Attributes:</strong> Enter your custom watermark text (e.g., "COPY", "DO NOT DISTRIBUTE"), choose diagonal or horizontal orientation, and fine-tune opacity so it protects the file without obscuring document readability.</li>
+        <li><strong>Download Modified PDF:</strong> Click <em>Apply Watermark & Download PDF</em>. The vector text is merged into each page stream and saved to your device immediately.</li>
+      </ol>
+
+      <h3 class="text-lg font-bold text-slate-900 pt-4 border-t border-slate-100">Why Use In-Browser Watermarking?</h3>
+      <p>
+        Watermarking is typically used on sensitive material—such as unreleased financial audits, proprietary schematics, employment contracts, or identity documentation. Uploading these documents to public web servers to stamp a watermark undermines the very confidentiality you are attempting to protect.
+      </p>
+      <p>
+        InstantFileTools runs vector operations through <code>pdf-lib</code> directly within your browser. The engine calculates the geometric center of each page bounding box (mediabox) and stamps the vector text characters with precise alpha blending. The source file stays strictly in your computer's RAM.
+      </p>
+
+      <h3 class="text-lg font-bold text-slate-900 pt-4 border-t border-slate-100">Frequently Asked Questions</h3>
+      <div class="space-y-3 text-xs sm:text-sm">
+        <div>
+          <p class="font-semibold text-slate-900">Can the watermark be easily erased?</p>
+          <p class="text-xs text-slate-500 mt-1">Our tool injects the text directly into the page's structural content stream, making it a permanent part of the document rather than a superficial web overlay.</p>
+        </div>
+        <div>
+          <p class="font-semibold text-slate-900">What is the optimal opacity for background stamps?</p>
+          <p class="text-xs text-slate-500 mt-1">We recommend setting opacity between <strong>20% and 30%</strong>. This ensures the watermark is distinct while keeping underlying text and data fully readable.</p>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <footer class="bg-white border-t border-slate-200 py-6 text-xs text-slate-500 text-center">
+    <div class="max-w-4xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+      <span>© 2026 InstantFileTools. All rights reserved.</span>
+      <div class="space-x-4">
+        <a href="/privacy.html" class="hover:text-indigo-600">Privacy Policy</a>
+        <a href="/terms.html" class="hover:text-indigo-600">Terms of Use</a>
+        <a href="/contact.html" class="hover:text-indigo-600">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    let rawBytes = null;
+    let selectedFile = null;
+
+    function setupDropzone() {
+      const zone = document.getElementById('dropzone');
+      const input = document.getElementById('file-input');
+      ['dragenter', 'dragover'].forEach(n => zone.addEventListener(n, e => { e.preventDefault(); zone.classList.add('drop-active'); }));
+      ['dragleave', 'drop'].forEach(n => zone.addEventListener(n, e => { e.preventDefault(); zone.classList.remove('drop-active'); }));
+      zone.addEventListener('drop', e => {
+        if (e.dataTransfer.files.length) {
+          input.files = e.dataTransfer.files;
+          onPdfSelected({ target: input });
+        }
+      });
+    }
+    setupDropzone();
+
+    async function onPdfSelected(e) {
+      selectedFile = e.target.files[0];
+      if (!selectedFile) return;
+
+      document.getElementById('file-label').innerText = selectedFile.name;
+      document.getElementById('info-filename').innerText = selectedFile.name;
+      document.getElementById('info-filesize').innerText = (selectedFile.size / 1024).toFixed(1) + " KB";
+
+      rawBytes = await selectedFile.arrayBuffer();
+      try {
+        const doc = await PDFLib.PDFDocument.load(rawBytes);
+        document.getElementById('info-pagecount').innerText = `${doc.getPageCount()} Page${doc.getPageCount() === 1 ? '' : 's'}`;
+        document.getElementById('controls').classList.remove('hidden');
+      } catch (err) {
+        alert("Failed to load PDF. Ensure the file is not corrupted or password-protected.");
+      }
+    }
+
+    async function executeWatermark() {
+      if (!rawBytes) return;
+      const status = document.getElementById('status-msg');
+      status.innerText = "Applying watermark in memory...";
+      status.classList.remove('hidden');
+
+      try {
+        const doc = await PDFLib.PDFDocument.load(rawBytes);
+        const font = await doc.embedFont(PDFLib.StandardFonts.HelveticaBold);
+        const text = document.getElementById('watermark-text').value.trim() || 'CONFIDENTIAL';
+        const fontSize = parseInt(document.getElementById('watermark-size').value, 10);
+        const opacity = parseInt(document.getElementById('watermark-opacity').value, 10) / 100;
+        const angleDeg = parseInt(document.getElementById('watermark-angle').value, 10);
+        const colorChoice = document.getElementById('watermark-color').value;
+
+        // Determine color RGB values
+        let colorRgb;
+        if (colorChoice === 'red') {
+          colorRgb = PDFLib.rgb(0.9, 0.1, 0.1);
+        } else if (colorChoice === 'blue') {
+          colorRgb = PDFLib.rgb(0.1, 0.3, 0.8);
+        } else {
+          colorRgb = PDFLib.rgb(0.5, 0.5, 0.5);
+        }
+
+        const pages = doc.getPages();
+        const textWidth = font.widthOfTextAtSize(text, fontSize);
+        const textHeight = font.heightAtSize(fontSize);
+
+        pages.forEach(page => {
+          const { width, height } = page.getSize();
+          
+          // Calculate center coordinates
+          const x = width / 2 - (textWidth / 2) * Math.cos((angleDeg * Math.PI) / 180);
+          const y = height / 2 - (textWidth / 2) * Math.sin((angleDeg * Math.PI) / 180);
+
+          page.drawText(text, {
+            x: x,
+            y: y,
+            size: fontSize,
+            font: font,
+            color: colorRgb,
+            opacity: opacity,
+            rotate: PDFLib.degrees(angleDeg)
+          });
+        });
+
+        const outBytes = await doc.save();
+        const blob = new Blob([outBytes], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `watermarked-${Date.now()}.pdf`;
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        status.innerText = "✅ Watermarked PDF downloaded successfully!";
+      } catch (err) {
+        status.innerText = "Failed to apply watermark. Ensure document is unencrypted.";
+      }
+    }
+  </script>
+</body>
+</html>
