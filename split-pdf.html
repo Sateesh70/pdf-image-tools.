@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="google-adsense-account" content="ca-pub-6682141621893299">
+  <title>Split PDF Online - Extract Pages From PDF Privately</title>
+  <meta name="description" content="Extract custom page ranges or separate individual pages from any PDF document locally in your browser. Completely free, secure, and fast." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .drop-active { border-color: #4f46e5 !important; background-color: #eef2ff !important; }
+    .glass-nav { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+  </style>
+</head>
+<body class="bg-[#f8fafc] text-slate-800 min-h-screen flex flex-col justify-between selection:bg-indigo-600 selection:text-white">
+
+  <div class="bg-indigo-950 text-indigo-200 text-xs py-2 px-4 text-center font-medium border-b border-indigo-900">
+    🔒 <strong>100% Client-Side:</strong> Document parsing runs locally. Your files are never transmitted across the network.
+  </div>
+
+  <header class="sticky top-0 z-50 bg-white/90 glass-nav border-b border-slate-200/80">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex justify-between items-center">
+      <a href="/" class="flex items-center space-x-3 group">
+        <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-extrabold text-xl shadow-md group-hover:scale-105 transition">I</div>
+        <div>
+          <span class="text-xl font-extrabold tracking-tight text-slate-900">InstantFile<span class="text-indigo-600">Tools</span></span>
+          <span class="block text-[10px] text-slate-400 font-semibold tracking-wider uppercase">Local Privacy Suite</span>
+        </div>
+      </a>
+      <nav class="hidden sm:flex items-center space-x-6 text-sm font-semibold text-slate-600">
+        <a href="/merge-pdf.html" class="hover:text-indigo-600 transition">Merge PDF</a>
+        <a href="/split-pdf.html" class="text-indigo-600 font-bold">Split PDF</a>
+        <a href="/compress-image.html" class="hover:text-indigo-600 transition">Compress Image</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 pt-10 pb-16 w-full flex-1">
+    <div class="text-center max-w-2xl mx-auto mb-8">
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+        Split PDF Pages <span class="text-indigo-600">Without Uploading</span>
+      </h1>
+      <p class="text-slate-500 text-sm mt-2">
+        Extract exact page ranges or single pages into a new clean document locally on your device.
+      </p>
+    </div>
+
+    <!-- Split Workspace -->
+    <div class="bg-white rounded-3xl shadow-xl shadow-slate-200/60 border border-slate-200/80 p-6 sm:p-10">
+      <div id="dropzone" class="border-2 border-dashed border-slate-300 hover:border-indigo-500 rounded-2xl p-10 text-center bg-slate-50/50 cursor-pointer transition flex flex-col items-center justify-center gap-2 group" onclick="document.getElementById('file-input').click()">
+        <input type="file" id="file-input" accept="application/pdf" class="hidden" onchange="onFileSelected(event)" />
+        <div class="w-14 h-14 rounded-full bg-white shadow-sm flex items-center justify-center text-2xl group-hover:scale-110 transition">✂️</div>
+        <p class="text-sm font-bold text-slate-800">Drop your PDF file here, or <span class="text-indigo-600 underline">browse</span></p>
+        <p id="file-label" class="text-xs text-slate-400">Select any PDF file of any size</p>
+      </div>
+
+      <div id="controls" class="mt-6 space-y-4 hidden bg-slate-50 p-6 rounded-2xl border border-slate-200">
+        <div class="flex justify-between items-center mb-1">
+          <label class="text-xs font-bold text-slate-700">Pages to Extract:</label>
+          <span id="page-count-badge" class="text-xs font-semibold text-indigo-600"></span>
+        </div>
+        <input type="text" id="range-input" placeholder="e.g. 1-3, 5, 8" class="w-full border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
+        <p class="text-[11px] text-slate-500 leading-normal">
+          Specify single pages separated by commas (<code class="bg-slate-200 px-1 py-0.5 rounded">1, 4, 7</code>) or consecutive ranges (<code class="bg-slate-200 px-1 py-0.5 rounded">2-5</code>).
+        </p>
+        <button onclick="executeSplit()" class="w-full bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] text-white font-bold py-3.5 px-6 rounded-xl transition text-sm shadow-lg shadow-indigo-200">
+          Extract & Download PDF
+        </button>
+      </div>
+      <p id="status-msg" class="text-center text-xs font-semibold text-indigo-600 mt-4 hidden"></p>
+    </div>
+
+    <!-- Editorial Scaffolding -->
+    <article class="mt-12 bg-white rounded-3xl border border-slate-200/80 p-8 sm:p-10 space-y-6 text-slate-600 text-sm leading-relaxed">
+      <h2 class="text-2xl font-bold text-slate-900">How to Extract Specific Pages From a PDF</h2>
+      <p>
+        Extracting pages from large reports, books, or scanned multi-page invoices often presents a dilemma: you want just a few pages, but third-party tools require you to hand over the entire document to their servers.
+      </p>
+      <p>
+        With InstantFileTools, your PDF is loaded directly into your browser's V8 JavaScript runtime. The engine parses the PDF object cross-reference table, extracts only the selected page indices, and packs them into a lightweight new document without any server-side upload.
+      </p>
+
+      <h3 class="text-lg font-bold text-slate-900 pt-4 border-t border-slate-100">Supported Extraction Formats</h3>
+      <ul class="list-disc pl-5 space-y-1 text-xs sm:text-sm">
+        <li><strong>Continuous Range:</strong> Type <code>1-5</code> to grab the first 5 pages of the file.</li>
+        <li><strong>Discrete Pages:</strong> Type <code>1, 3, 7</code> to extract specific non-adjacent pages.</li>
+        <li><strong>Hybrid Selections:</strong> Type <code>1-3, 5, 8-10</code> to combine both individual pages and clusters.</li>
+      </ul>
+    </article>
+  </main>
+
+  <footer class="bg-white border-t border-slate-200 py-6 text-xs text-slate-500 text-center">
+    <div class="max-w-4xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+      <span>© 2026 InstantFileTools. All rights reserved.</span>
+      <div class="space-x-4">
+        <a href="/privacy.html" class="hover:text-indigo-600">Privacy Policy</a>
+        <a href="/terms.html" class="hover:text-indigo-600">Terms of Use</a>
+        <a href="/contact.html" class="hover:text-indigo-600">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    let loadedDoc = null;
+
+    function setupDropzone() {
+      const zone = document.getElementById('dropzone');
+      const input = document.getElementById('file-input');
+      ['dragenter', 'dragover'].forEach(n => zone.addEventListener(n, e => { e.preventDefault(); zone.classList.add('drop-active'); }));
+      ['dragleave', 'drop'].forEach(n => zone.addEventListener(n, e => { e.preventDefault(); zone.classList.remove('drop-active'); }));
+      zone.addEventListener('drop', e => {
+        if (e.dataTransfer.files.length) {
+          input.files = e.dataTransfer.files;
+          onFileSelected({ target: input });
+        }
+      });
+    }
+    setupDropzone();
+
+    async function onFileSelected(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      document.getElementById('file-label').innerText = `Selected: ${file.name}`;
+      const bytes = await file.arrayBuffer();
+      loadedDoc = await PDFLib.PDFDocument.load(bytes);
+      const total = loadedDoc.getPageCount();
+      document.getElementById('page-count-badge').innerText = `Total Document Pages: ${total}`;
+      document.getElementById('controls').classList.remove('hidden');
+    }
+
+    async function executeSplit() {
+      if (!loadedDoc) return;
+      const range = document.getElementById('range-input').value.trim();
+      const total = loadedDoc.getPageCount();
+      let pages = [];
+
+      if (range.includes('-') && !range.includes(',')) {
+        const [s, e] = range.split('-').map(Number);
+        for (let i = Math.max(1, s); i <= Math.min(total, e); i++) pages.push(i - 1);
+      } else if (range.includes(',')) {
+        range.split(',').forEach(part => {
+          if (part.includes('-')) {
+            const [s, e] = part.split('-').map(Number);
+            for (let i = Math.max(1, s); i <= Math.min(total, e); i++) pages.push(i - 1);
+          } else {
+            const n = Number(part.trim()) - 1;
+            if (n >= 0 && n < total) pages.push(n);
+          }
+        });
+      } else {
+        const p = Number(range) - 1;
+        if (p >= 0 && p < total) pages.push(p);
+      }
+
+      if (!pages.length) return alert("Please specify valid page numbers within the document range.");
+
+      const newDoc = await PDFLib.PDFDocument.create();
+      const copied = await newDoc.copyPages(loadedDoc, pages);
+      copied.forEach(p => newDoc.addPage(p));
+      const outBytes = await newDoc.save();
+
+      const blob = new Blob([outBytes], { type: 'application/pdf' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `extracted-pages-${Date.now()}.pdf`;
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+  </script>
+</body>
+</html>
