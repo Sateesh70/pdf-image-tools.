@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="google-adsense-account" content="ca-pub-6682141621893299">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-X7C20RQ87W"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-X7C20RQ87W');
+  </script>
+
+  <title>PDF to Image Converter - Convert PDF Pages to JPG & PNG Privately</title>
+  <meta name="description" content="Convert PDF documents into high-resolution JPG or PNG images locally in your browser. 100% private, zero file uploads, and no page limits." />
+  <meta name="keywords" content="pdf to image, pdf to jpg, pdf to png, extract images from pdf, convert pdf to picture, client side pdf tools" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- PDF.js library for high-fidelity client-side rendering -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .drop-active { border-color: #4f46e5 !important; background-color: #eef2ff !important; }
+    .glass-nav { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "InstantFileTools - PDF to Image",
+    "url": "https://instantfiletools.online/pdf-to-image.html",
+    "description": "Convert PDF pages into high-resolution JPG or PNG pictures directly in the browser.",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "All",
+    "offers": { "@type": "Offer", "price": "0" }
+  }
+  </script>
+</head>
+<body class="bg-[#f8fafc] text-slate-800 min-h-screen flex flex-col justify-between selection:bg-indigo-600 selection:text-white">
+
+  <!-- Privacy Ribbon -->
+  <div class="bg-indigo-950 text-indigo-200 text-xs py-2.5 px-4 text-center font-medium border-b border-indigo-900">
+    🔒 <strong>100% In-Browser Rendering:</strong> PDF pages are rendered into pictures directly on your local device. Files are never uploaded.
+  </div>
+
+  <header class="sticky top-0 z-50 bg-white/90 glass-nav border-b border-slate-200/80 transition-all">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex justify-between items-center">
+      <a href="/" class="flex items-center space-x-3 group">
+        <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-extrabold text-xl shadow-md shadow-indigo-200 group-hover:scale-105 transition">I</div>
+        <div>
+          <span class="text-xl font-extrabold tracking-tight text-slate-900">InstantFile<span class="text-indigo-600">Tools</span></span>
+          <span class="block text-[10px] text-slate-400 font-semibold tracking-wider uppercase">Local Privacy Suite</span>
+        </div>
+      </a>
+      <nav class="hidden sm:flex items-center space-x-6 text-sm font-semibold text-slate-600">
+        <a href="/merge-pdf.html" class="hover:text-indigo-600 transition">Merge PDF</a>
+        <a href="/split-pdf.html" class="hover:text-indigo-600 transition">Split PDF</a>
+        <a href="/compress-pdf.html" class="hover:text-indigo-600 transition">Compress PDF</a>
+        <a href="/pdf-to-image.html" class="text-indigo-600 font-bold">PDF to Image</a>
+        <a href="/compress-image.html" class="hover:text-indigo-600 transition">Compress Image</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 pt-10 pb-16 w-full flex-1">
+    <div class="text-center max-w-2xl mx-auto mb-8">
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-100 mb-4">
+        ⚡ High-DPI Canvas Rendering • Zero Server Transits
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+        Convert PDF to Images <span class="text-indigo-600">Privately</span>
+      </h1>
+      <p class="text-slate-500 text-sm mt-2">
+        Extract each page of your PDF into high-definition JPG or PNG files without uploading documents to the cloud.
+      </p>
+    </div>
+
+    <!-- Conversion Workspace -->
+    <div class="bg-white rounded-3xl shadow-xl shadow-slate-200/60 border border-slate-200/80 p-6 sm:p-10">
+      <div id="dropzone" class="border-2 border-dashed border-slate-300 hover:border-indigo-500 rounded-2xl p-10 text-center bg-slate-50/50 cursor-pointer transition flex flex-col items-center justify-center gap-2 group" onclick="document.getElementById('file-input').click()">
+        <input type="file" id="file-input" accept="application/pdf" class="hidden" onchange="onPdfSelected(event)" />
+        <div class="w-14 h-14 rounded-full bg-white shadow-sm flex items-center justify-center text-2xl group-hover:scale-110 transition">📸</div>
+        <p class="text-sm font-bold text-slate-800">Drop a PDF file here, or <span class="text-indigo-600 underline">browse</span></p>
+        <p id="file-label" class="text-xs text-slate-400">Process multi-page documents locally</p>
+      </div>
+
+      <div id="controls" class="mt-6 space-y-6 hidden">
+        <!-- Settings Bar -->
+        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div>
+            <p class="text-xs font-bold text-slate-800" id="info-filename">document.pdf</p>
+            <p class="text-[11px] text-slate-400 mt-0.5" id="info-pagecount">0 Pages Found</p>
+          </div>
+          <div class="flex items-center gap-3 w-full sm:w-auto">
+            <label class="text-xs font-bold text-slate-700">Format:</label>
+            <select id="target-format" class="border border-slate-300 bg-white rounded-xl px-3 py-2 text-xs font-semibold focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+              <option value="image/jpeg">JPG (Standard Photo)</option>
+              <option value="image/png">PNG (Lossless Sharp)</option>
+            </select>
+            <button onclick="convertAllPages()" id="btn-convert-all" class="bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] text-white font-bold py-2 px-4 rounded-xl transition text-xs shadow-md shadow-indigo-200">
+              Convert All Pages
+            </button>
+          </div>
+        </div>
+
+        <!-- Progress Indicator -->
+        <div id="progress-bar-container" class="hidden space-y-2">
+          <div class="flex justify-between text-xs font-semibold text-slate-600">
+            <span id="progress-label">Rendering pages...</span>
+            <span id="progress-percent">0%</span>
+          </div>
+          <div class="w-full bg-slate-200 rounded-full h-2.5 overflow-hidden">
+            <div id="progress-bar-fill" class="bg-indigo-600 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <!-- Rendered Images Grid -->
+        <div id="images-output-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-2"></div>
+      </div>
+    </div>
+
+    <!-- Editorial Scaffolding Section -->
+    <article class="mt-12 bg-white rounded-3xl border border-slate-200/80 p-8 sm:p-10 space-y-6 text-slate-600 text-sm leading-relaxed">
+      <h2 class="text-2xl font-bold text-slate-900">How to Convert PDF Pages into Images Privately</h2>
+      <ol class="list-decimal pl-5 space-y-2 text-xs sm:text-sm">
+        <li><strong>Select Document:</strong> Drag and drop your PDF into the workspace above or click to browse.</li>
+        <li><strong>Select Desired Format:</strong> Choose between universal <strong>JPG</strong> for smaller sizes or <strong>PNG</strong> for lossless vector typography and graphics.</li>
+        <li><strong>Render & Download:</strong> Click <em>Convert All Pages</em>. Each page is drawn in real time into browser canvas memory, giving you instant one-click download buttons for each page.</li>
+      </ol>
+
+      <h3 class="text-lg font-bold text-slate-900 pt-4 border-t border-slate-100">Client-Side Canvas Rendering Explained</h3>
+      <p>
+        Most web tools upload your PDF to a remote cloud worker running headless engines to render page frames. This creates delays and forces you to transmit confidential contracts, tax documents, or medical records over the web.
+      </p>
+      <p>
+        InstantFileTools runs Mozilla's WebAssembly-accelerated <strong>PDF.js</strong> engine inside your browser. It interprets the raw vector primitives, fonts, and raster images of the PDF document and draws them directly onto an HTML5 <code>&lt;canvas&gt;</code> element at a 2.0x DPI scale factor. The canvas stream is then saved locally using <code>canvas.toBlob()</code> with zero network latency.
+      </p>
+
+      <h3 class="text-lg font-bold text-slate-900 pt-4 border-t border-slate-100">Frequently Asked Questions</h3>
+      <div class="space-y-3 text-xs sm:text-sm">
+        <div>
+          <p class="font-semibold text-slate-900">Should I choose JPG or PNG?</p>
+          <p class="text-xs text-slate-500 mt-1">Choose <strong>JPG</strong> if you want smaller files to share on messaging apps or upload to job portals. Choose <strong>PNG</strong> if your PDF contains fine text, charts, or diagrams where crisp, artifact-free edges are needed.</p>
+        </div>
+        <div>
+          <p class="font-semibold text-slate-900">Is there a maximum page count?</p>
+          <p class="text-xs text-slate-500 mt-1">Because all rendering takes place inside your computer's RAM, multi-page documents with 50+ pages convert smoothly without server timeout caps.</p>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <footer class="bg-white border-t border-slate-200 py-6 text-xs text-slate-500 text-center">
+    <div class="max-w-4xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+      <span>© 2026 InstantFileTools. All rights reserved.</span>
+      <div class="space-x-4">
+        <a href="/privacy.html" class="hover:text-indigo-600">Privacy Policy</a>
+        <a href="/terms.html" class="hover:text-indigo-600">Terms of Use</a>
+        <a href="/contact.html" class="hover:text-indigo-600">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Set up PDF.js worker
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+    let pdfDoc = null;
+    let selectedFile = null;
+
+    function setupDropzone() {
+      const zone = document.getElementById('dropzone');
+      const input = document.getElementById('file-input');
+      ['dragenter', 'dragover'].forEach(n => zone.addEventListener(n, e => { e.preventDefault(); zone.classList.add('drop-active'); }));
+      ['dragleave', 'drop'].forEach(n => zone.addEventListener(n, e => { e.preventDefault(); zone.classList.remove('drop-active'); }));
+      zone.addEventListener('drop', e => {
+        if (e.dataTransfer.files.length) {
+          input.files = e.dataTransfer.files;
+          onPdfSelected({ target: input });
+        }
+      });
+    }
+    setupDropzone();
+
+    async function onPdfSelected(e) {
+      selectedFile = e.target.files[0];
+      if (!selectedFile) return;
+
+      document.getElementById('file-label').innerText = selectedFile.name;
+      document.getElementById('info-filename').innerText = selectedFile.name;
+      document.getElementById('images-output-grid').innerHTML = '';
+
+      const arrayBuffer = await selectedFile.arrayBuffer();
+      try {
+        pdfDoc = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+        document.getElementById('info-pagecount').innerText = `${pdfDoc.numPages} Page${pdfDoc.numPages === 1 ? '' : 's'} Ready`;
+        document.getElementById('controls').classList.remove('hidden');
+      } catch (err) {
+        alert("Failed to read PDF. Ensure the file is not corrupted or password-protected.");
+      }
+    }
+
+    async function convertAllPages() {
+      if (!pdfDoc) return;
+      const targetFormat = document.getElementById('target-format').value;
+      const ext = targetFormat === 'image/jpeg' ? 'jpg' : 'png';
+      const outputGrid = document.getElementById('images-output-grid');
+      const progressContainer = document.getElementById('progress-bar-container');
+      const progressBar = document.getElementById('progress-bar-fill');
+      const progressLabel = document.getElementById('progress-label');
+      const progressPercent = document.getElementById('progress-percent');
+      const convertBtn = document.getElementById('btn-convert-all');
+
+      outputGrid.innerHTML = '';
+      progressContainer.classList.remove('hidden');
+      convertBtn.disabled = true;
+
+      for (let pageNum = 1; pageNum <= pdfDoc.numPages; pageNum++) {
+        // Update progress
+        const pct = Math.round((pageNum / pdfDoc.numPages) * 100);
+        progressBar.style.width = pct + '%';
+        progressPercent.innerText = pct + '%';
+        progressLabel.innerText = `Rendering Page ${pageNum} of ${pdfDoc.numPages}...`;
+
+        // Render page to canvas
+        const page = await pdfDoc.getPage(pageNum);
+        const viewport = page.getViewport({ scale: 2.0 }); // 2x scale for high resolution
+
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+
+        await page.render({ canvasContext: context, viewport: viewport }).promise;
+
+        // Convert canvas to image blob
+        await new Promise(resolve => {
+          canvas.toBlob(blob => {
+            const blobUrl = URL.createObjectURL(blob);
+            const card = document.createElement('div');
+            card.className = "bg-slate-50 border border-slate-200 rounded-2xl p-3 flex flex-col justify-between shadow-sm hover:shadow transition";
+            card.innerHTML = `
+              <div>
+                <div class="flex justify-between items-center text-[10px] font-bold text-slate-500 mb-2">
+                  <span>Page ${pageNum}</span>
+                  <span class="uppercase">${ext}</span>
+                </div>
+                <img src="${blobUrl}" class="w-full h-44 object-contain rounded-lg border border-slate-200 bg-white mb-3" />
+              </div>
+              <a href="${blobUrl}" download="${selectedFile.name.replace('.pdf', '')}-page-${pageNum}.${ext}" class="w-full text-center bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2 rounded-xl transition shadow-sm">
+                Download Page ${pageNum}
+              </a>
+            `;
+            outputGrid.appendChild(card);
+            resolve();
+          }, targetFormat, 0.92);
+        });
+      }
+
+      progressLabel.innerText = "All pages rendered successfully!";
+      convertBtn.disabled = false;
+    }
+  </script>
+</body>
+</html>
