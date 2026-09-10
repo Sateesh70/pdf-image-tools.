@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="google-adsense-account" content="ca-pub-6682141621893299">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-X7C20RQ87W"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-X7C20RQ87W');
+  </script>
+
+  <title>Resize Image Online - Change Pixel Dimensions Privately in Browser</title>
+  <meta name="description" content="Resize image width and height in pixels or percentage locally in your browser. Lock aspect ratio for passport, exam forms, and web uploads with zero server uploads." />
+  <meta name="keywords" content="resize image, resize photo, change image dimensions, passport photo resize, image pixel resizer, client side photo tool" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .drop-active { border-color: #4f46e5 !important; background-color: #eef2ff !important; }
+    .glass-nav { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "InstantFileTools - Resize Image",
+    "url": "https://instantfiletools.online/resize-image.html",
+    "description": "Resize image width and height accurately in local browser RAM.",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "All",
+    "offers": { "@type": "Offer", "price": "0" }
+  }
+  </script>
+</head>
+<body class="bg-[#f8fafc] text-slate-800 min-h-screen flex flex-col justify-between selection:bg-indigo-600 selection:text-white">
+
+  <!-- Privacy Ribbon -->
+  <div class="bg-indigo-950 text-indigo-200 text-xs py-2.5 px-4 text-center font-medium border-b border-indigo-900">
+    🔒 <strong>100% In-Browser Execution:</strong> Pixel scaling operations execute locally inside your browser's HTML5 Canvas. Photos are never uploaded.
+  </div>
+
+  <header class="sticky top-0 z-50 bg-white/90 glass-nav border-b border-slate-200/80 transition-all">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex justify-between items-center">
+      <a href="/" class="flex items-center space-x-3 group">
+        <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-extrabold text-xl shadow-md shadow-indigo-200 group-hover:scale-105 transition">I</div>
+        <div>
+          <span class="text-xl font-extrabold tracking-tight text-slate-900">InstantFile<span class="text-indigo-600">Tools</span></span>
+          <span class="block text-[10px] text-slate-400 font-semibold tracking-wider uppercase">Local Privacy Suite</span>
+        </div>
+      </a>
+      <nav class="hidden sm:flex items-center space-x-6 text-sm font-semibold text-slate-600">
+        <a href="/merge-pdf.html" class="hover:text-indigo-600 transition">Merge PDF</a>
+        <a href="/split-pdf.html" class="hover:text-indigo-600 transition">Split PDF</a>
+        <a href="/compress-image.html" class="hover:text-indigo-600 transition">Compress Image</a>
+        <a href="/resize-image.html" class="text-indigo-600 font-bold">Resize Image</a>
+        <a href="/format-converter.html" class="hover:text-indigo-600 transition">Convert Image</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 pt-10 pb-16 w-full flex-1">
+    <div class="text-center max-w-2xl mx-auto mb-8">
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-100 mb-4">
+        ⚡ Exact Pixel Scaling • Zero Upload Delay
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+        Resize Image Dimensions <span class="text-indigo-600">Privately</span>
+      </h1>
+      <p class="text-slate-500 text-sm mt-2">
+        Modify pixel width and height for official job applications, government portals, or web layouts without uploading files.
+      </p>
+    </div>
+
+    <!-- Resizer Workspace -->
+    <div class="bg-white rounded-3xl shadow-xl shadow-slate-200/60 border border-slate-200/80 p-6 sm:p-10">
+      <div id="dropzone" class="border-2 border-dashed border-slate-300 hover:border-indigo-500 rounded-2xl p-10 text-center bg-slate-50/50 cursor-pointer transition flex flex-col items-center justify-center gap-2 group" onclick="document.getElementById('file-input').click()">
+        <input type="file" id="file-input" accept="image/*" class="hidden" onchange="onFileSelected(event)" />
+        <div class="w-14 h-14 rounded-full bg-white shadow-sm flex items-center justify-center text-2xl group-hover:scale-110 transition">📐</div>
+        <p class="text-sm font-bold text-slate-800">Drop an image here, or <span class="text-indigo-600 underline">browse</span></p>
+        <p id="file-label" class="text-xs text-slate-400">JPG, PNG, and WebP supported</p>
+      </div>
+
+      <div id="controls" class="mt-6 space-y-6 hidden bg-slate-50 p-6 rounded-2xl border border-slate-200">
+        <!-- Info Overview -->
+        <div class="flex items-center justify-between p-3.5 bg-white border border-slate-200 rounded-xl">
+          <div>
+            <p class="text-xs font-bold text-slate-800" id="info-filename">photo.jpg</p>
+            <p class="text-[11px] text-slate-400 mt-0.5" id="info-orig-dim">Original: 0 x 0 px</p>
+          </div>
+          <span class="text-xs font-mono font-bold text-slate-700 bg-slate-100 px-2.5 py-1 rounded-lg" id="info-filesize">0 KB</span>
+        </div>
+
+        <!-- Dimension Inputs -->
+        <div class="space-y-4">
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1.5">Width (pixels):</label>
+              <input type="number" id="input-w" class="w-full border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white font-mono" oninput="onDimensionChange('w')" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1.5">Height (pixels):</label>
+              <input type="number" id="input-h" class="w-full border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white font-mono" oninput="onDimensionChange('h')" />
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
+            <label class="flex items-center space-x-2 cursor-pointer">
+              <input type="checkbox" id="aspect-lock" checked class="w-4 h-4 accent-indigo-600 rounded cursor-pointer" />
+              <span class="text-xs text-slate-700 font-semibold">Lock aspect ratio</span>
+            </label>
+
+            <!-- Quick Scale Presets -->
+            <div class="flex items-center gap-1.5 text-xs">
+              <span class="text-slate-400 text-[11px] font-semibold">Presets:</span>
+              <button onclick="applyPercentagePreset(0.25)" class="px-2 py-1 bg-white border border-slate-200 rounded-lg hover:border-indigo-500 text-slate-600 font-semibold transition">25%</button>
+              <button onclick="applyPercentagePreset(0.50)" class="px-2 py-1 bg-white border border-slate-200 rounded-lg hover:border-indigo-500 text-slate-600 font-semibold transition">50%</button>
+              <button onclick="applyPercentagePreset(0.75)" class="px-2 py-1 bg-white border border-slate-200 rounded-lg hover:border-indigo-500 text-slate-600 font-semibold transition">75%</button>
+              <button onclick="resetDimensions()" class="px-2 py-1 bg-slate-200 rounded-lg hover:bg-slate-300 text-slate-600 font-semibold transition">100%</button>
+            </div>
+          </div>
+        </div>
+
+        <button onclick="executeResize()" class="w-full bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] text-white font-bold py-3.5 px-6 rounded-xl transition text-sm shadow-lg shadow-indigo-200 flex items-center justify-center gap-2">
+          <span>Resize & Download Image</span>
+        </button>
+
+        <div id="result-box" class="p-4 bg-white border border-slate-200 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4 hidden">
+          <div class="flex items-center gap-3">
+            <img id="thumb-preview" class="w-14 h-14 object-cover rounded-lg border border-slate-200" />
+            <div>
+              <p class="text-xs text-slate-500">Target Size: <span id="res-dim" class="font-bold text-slate-800"></span></p>
+              <p class="text-xs text-slate-500">Weight: <span id="res-weight" class="font-extrabold text-emerald-600 text-sm"></span></p>
+            </div>
+          </div>
+          <a id="dl-btn" class="w-full sm:w-auto text-center bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-5 py-3 rounded-xl transition shadow-md shadow-emerald-200" download="resized-image.png">
+            Download Resized Image
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Editorial Scaffolding Section -->
+    <article class="mt-12 bg-white rounded-3xl border border-slate-200/80 p-8 sm:p-10 space-y-6 text-slate-600 text-sm leading-relaxed">
+      <h2 class="text-2xl font-bold text-slate-900">How to Resize Images in Exact Pixels Privately</h2>
+      <ol class="list-decimal pl-5 space-y-2 text-xs sm:text-sm">
+        <li><strong>Select Image:</strong> Drop any JPG, PNG, or WebP picture into the upload zone above.</li>
+        <li><strong>Set Dimensions:</strong> Enter your required target width or height. Leave <em>Lock aspect ratio</em> checked to prevent visual stretching or distortion, or uncheck it to match non-standard application forms.</li>
+        <li><strong>Save File:</strong> Click <em>Resize & Download Image</em>. The browser's Canvas API interpolates the pixels locally and triggers your download.</li>
+      </ol>
+
+      <h3 class="text-lg font-bold text-slate-900 pt-4 border-t border-slate-100">Common Pixel Dimension Guidelines</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+          <p class="font-bold text-slate-900 mb-1">Passport Photos & Application Forms</p>
+          <p class="text-xs text-slate-500 leading-normal">Typically requires <strong>200 x 230 px</strong> (or 35mm x 45mm at 150 DPI) for signatures and facial ID cards.</p>
+        </div>
+        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+          <p class="font-bold text-slate-900 mb-1">Web & Social Media Standards</p>
+          <p class="text-xs text-slate-500 leading-normal">Avatar icons: <strong>400 x 400 px</strong> (1:1). Landscape banners: <strong>1200 x 630 px</strong> (OpenGraph web standard).</p>
+        </div>
+      </div>
+
+      <h3 class="text-lg font-bold text-slate-900 pt-4 border-t border-slate-100">Frequently Asked Questions</h3>
+      <div class="space-y-3 text-xs sm:text-sm">
+        <div>
+          <p class="font-semibold text-slate-900">Does shrinking an image's pixel dimensions decrease file size (KB)?</p>
+          <p class="text-xs text-slate-500 mt-1">Yes. Because reducing pixel dimensions decreases the total number of color samples stored in the bitmap table, file weight drops proportionally.</p>
+        </div>
+        <div>
+          <p class="font-semibold text-slate-900">Can I enlarge a small photo to large pixel dimensions?</p>
+          <p class="text-xs text-slate-500 mt-1">Yes, but scaling up an image beyond its original sensor resolution will cause bilinear smoothing or pixelation since software cannot synthesize missing camera detail.</p>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <footer class="bg-white border-t border-slate-200 py-6 text-xs text-slate-500 text-center">
+    <div class="max-w-4xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+      <span>© 2026 InstantFileTools. All rights reserved.</span>
+      <div class="space-x-4">
+        <a href="/privacy.html" class="hover:text-indigo-600">Privacy Policy</a>
+        <a href="/terms.html" class="hover:text-indigo-600">Terms of Use</a>
+        <a href="/contact.html" class="hover:text-indigo-600">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    let activeFile = null;
+    let loadedImg = null;
+    let origWidth = 0;
+    let origHeight = 0;
+
+    function setupDropzone() {
+      const zone = document.getElementById('dropzone');
+      const input = document.getElementById('file-input');
+      ['dragenter', 'dragover'].forEach(n => zone.addEventListener(n, e => { e.preventDefault(); zone.classList.add('drop-active'); }));
+      ['dragleave', 'drop'].forEach(n => zone.addEventListener(n, e => { e.preventDefault(); zone.classList.remove('drop-active'); }));
+      zone.addEventListener('drop', e => {
+        if (e.dataTransfer.files.length) {
+          input.files = e.dataTransfer.files;
+          onFileSelected({ target: input });
+        }
+      });
+    }
+    setupDropzone();
+
+    function onFileSelected(e) {
+      activeFile = e.target.files[0];
+      if (!activeFile) return;
+
+      document.getElementById('file-label').innerText = activeFile.name;
+      document.getElementById('info-filename').innerText = activeFile.name;
+      document.getElementById('info-filesize').innerText = (activeFile.size / 1024).toFixed(1) + " KB";
+
+      const reader = new FileReader();
+      reader.onload = evt => {
+        loadedImg = new Image();
+        loadedImg.onload = () => {
+          origWidth = loadedImg.width;
+          origHeight = loadedImg.height;
+
+          document.getElementById('info-orig-dim').innerText = `Original: ${origWidth} x ${origHeight} px`;
+          document.getElementById('input-w').value = origWidth;
+          document.getElementById('input-h').value = origHeight;
+
+          document.getElementById('controls').classList.remove('hidden');
+          document.getElementById('result-box').classList.add('hidden');
+        };
+        loadedImg.src = evt.target.result;
+      };
+      reader.readAsDataURL(activeFile);
+    }
+
+    function onDimensionChange(changed) {
+      if (!origWidth || !origHeight) return;
+      const isLocked = document.getElementById('aspect-lock').checked;
+      const inputW = document.getElementById('input-w');
+      const inputH = document.getElementById('input-h');
+      const ratio = origWidth / origHeight;
+
+      if (isLocked) {
+        if (changed === 'w') {
+          const val = parseInt(inputW.value, 10);
+          if (!isNaN(val)) inputH.value = Math.round(val / ratio);
+        } else {
+          const val = parseInt(inputH.value, 10);
+          if (!isNaN(val)) inputW.value = Math.round(val * ratio);
+        }
+      }
+    }
+
+    function applyPercentagePreset(factor) {
+      if (!origWidth || !origHeight) return;
+      document.getElementById('input-w').value = Math.round(origWidth * factor);
+      document.getElementById('input-h').value = Math.round(origHeight * factor);
+    }
+
+    function resetDimensions() {
+      if (!origWidth || !origHeight) return;
+      document.getElementById('input-w').value = origWidth;
+      document.getElementById('input-h').value = origHeight;
+    }
+
+    function executeResize() {
+      if (!loadedImg || !activeFile) return;
+
+      const targetW = parseInt(document.getElementById('input-w').value, 10);
+      const targetH = parseInt(document.getElementById('input-h').value, 10);
+
+      if (isNaN(targetW) || isNaN(targetH) || targetW <= 0 || targetH <= 0) {
+        return alert("Please specify valid positive pixel dimensions.");
+      }
+
+      const canvas = document.createElement('canvas');
+      canvas.width = targetW;
+      canvas.height = targetH;
+      const ctx = canvas.getContext('2d');
+
+      // Preserve smooth high-quality bicubic downsampling
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
+
+      // Keep clean white background for non-PNG or transparent files
+      if (activeFile.type === 'image/jpeg') {
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, targetW, targetH);
+      }
+
+      ctx.drawImage(loadedImg, 0, 0, targetW, targetH);
+
+      const mime = activeFile.type === 'image/jpeg' ? 'image/jpeg' : 'image/png';
+      const ext = mime === 'image/jpeg' ? 'jpg' : 'png';
+
+      canvas.toBlob(blob => {
+        const dlBtn = document.getElementById('dl-btn');
+        const preview = document.getElementById('thumb-preview');
+        const url = URL.createObjectURL(blob);
+
+        dlBtn.href = url;
+        const cleanName = activeFile.name.substring(0, activeFile.name.lastIndexOf('.')) || activeFile.name;
+        dlBtn.download = `${cleanName}-${targetW}x${targetH}.${ext}`;
+
+        preview.src = url;
+        document.getElementById('res-dim').innerText = `${targetW} x ${targetH} px`;
+        document.getElementById('res-weight').innerText = (blob.size / 1024).toFixed(1) + " KB";
+        document.getElementById('result-box').classList.remove('hidden');
+      }, mime, 0.92);
+    }
+  </script>
+</body>
+</html>
