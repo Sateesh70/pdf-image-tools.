@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="google-adsense-account" content="ca-pub-6682141621893299">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-X7C20RQ87W"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-X7C20RQ87W');
+  </script>
+
+  <title>InstantFileTools - Free Client-Side PDF & Image Utilities</title>
+  <meta name="description" content="Free, 100% private online file utilities. Merge PDF, split pages, compress images, and convert media formats entirely in your browser without uploading to a server." />
+  <meta name="keywords" content="merge pdf, split pdf, compress image, image to pdf, free online file converter, client-side pdf tools" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-nav { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "InstantFileTools",
+    "url": "https://instantfiletools.online",
+    "description": "Free 100% local client-side PDF and image editing suite.",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "All",
+    "offers": { "@type": "Offer", "price": "0" }
+  }
+  </script>
+</head>
+<body class="bg-[#f8fafc] text-slate-800 min-h-screen flex flex-col justify-between selection:bg-indigo-600 selection:text-white">
+
+  <!-- Privacy Banner -->
+  <div class="bg-indigo-950 text-indigo-200 text-xs py-2.5 px-4 text-center font-medium border-b border-indigo-900">
+    🔒 <strong>100% Client-Side Processing:</strong> Files are parsed locally in browser RAM. Your confidential documents are never uploaded to any remote server.
+  </div>
+
+  <!-- Navigation -->
+  <header class="sticky top-0 z-50 bg-white/90 glass-nav border-b border-slate-200/80 transition-all">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex justify-between items-center">
+      <a href="/" class="flex items-center space-x-3 group">
+        <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-extrabold text-xl shadow-md shadow-indigo-200 group-hover:scale-105 transition">I</div>
+        <div>
+          <span class="text-xl font-extrabold tracking-tight text-slate-900">InstantFile<span class="text-indigo-600">Tools</span></span>
+          <span class="block text-[10px] text-slate-400 font-semibold tracking-wider uppercase">Local Privacy Suite</span>
+        </div>
+      </a>
+      <nav class="hidden sm:flex items-center space-x-6 text-sm font-semibold text-slate-600">
+        <a href="/merge-pdf.html" class="hover:text-indigo-600 transition">Merge PDF</a>
+        <a href="/split-pdf.html" class="hover:text-indigo-600 transition">Split PDF</a>
+        <a href="/compress-image.html" class="hover:text-indigo-600 transition">Compress Image</a>
+        <a href="#how-it-works" class="hover:text-indigo-600 transition">How It Works</a>
+        <a href="#faq" class="hover:text-indigo-600 transition">FAQ</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <main class="max-w-5xl mx-auto px-4 pt-12 pb-16 w-full flex-1">
+    <div class="text-center max-w-3xl mx-auto mb-8">
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 mb-4">
+        ⚡ Zero Upload Delays • 100% In-Browser Execution
+      </div>
+      <h1 class="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
+        Private PDF & Image Tools <br class="hidden sm:inline" />
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">No Sign-Ups. No Server Uploads.</span>
+      </h1>
+      <p class="text-slate-500 text-sm sm:text-base mt-3 max-w-xl mx-auto">
+        Modify, combine, and optimize documents without waiting for cloud queues. Select a dedicated tool below or search instantly.
+      </p>
+    </div>
+
+    <!-- Live Tool Search -->
+    <div class="max-w-md mx-auto mb-8">
+      <div class="relative flex items-center">
+        <span class="absolute left-4 text-slate-400 text-sm">🔍</span>
+        <input 
+          type="text" 
+          id="tool-search-input" 
+          placeholder="Type 'pdf', 'image', 'merge', 'compress'..." 
+          oninput="filterToolsBySearch(this.value)"
+          class="w-full bg-white border border-slate-200 shadow-sm rounded-2xl py-3.5 pl-11 pr-10 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+        />
+        <button 
+          id="search-clear-btn" 
+          onclick="clearToolSearch()" 
+          class="absolute right-3.5 text-slate-400 hover:text-slate-600 hidden text-sm font-bold p-1">
+          ✕
+        </button>
+      </div>
+      <p id="search-results-count" class="text-[11px] text-center text-slate-400 mt-2 hidden"></p>
+    </div>
+
+    <!-- Category Filter Tabs -->
+    <div class="flex justify-center mb-8">
+      <div class="bg-slate-200/70 p-1.5 rounded-2xl flex flex-wrap justify-center gap-1">
+        <button onclick="setCategory('all')" id="cat-all" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-white text-indigo-600 shadow-sm transition">All Utilities</button>
+        <button onclick="setCategory('pdf')" id="cat-pdf" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 transition">📄 PDF Tools</button>
+        <button onclick="setCategory('image')" id="cat-image" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 transition">🖼️ Image Tools</button>
+      </div>
+    </div>
+
+    <!-- Tool Portal Grid (iLovePDF Style) -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="tools-grid">
+
+      <!-- Merge PDF Card -->
+      <a href="/merge-pdf.html" data-category="pdf" data-keywords="pdf merge combine join document files arrange" class="tool-card group p-6 rounded-3xl bg-white border border-slate-200 shadow-sm hover:shadow-xl hover:border-indigo-500/50 hover:-translate-y-1 transition duration-200 flex flex-col justify-between">
+        <div>
+          <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition">📑</div>
+          <h3 class="text-base font-bold text-slate-900 group-hover:text-indigo-600 transition">Merge PDF Files</h3>
+          <p class="text-xs text-slate-500 mt-2 leading-relaxed">Combine multiple documents in any order using visual reordering cards with zero size caps.</p>
+        </div>
+        <div class="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-indigo-600">
+          <span>Open Workspace</span>
+          <span>→</span>
+        </div>
+      </a>
+
+      <!-- Split PDF Card -->
+      <a href="/split-pdf.html" data-category="pdf" data-keywords="pdf split extract pages cut range separate documents" class="tool-card group p-6 rounded-3xl bg-white border border-slate-200 shadow-sm hover:shadow-xl hover:border-indigo-500/50 hover:-translate-y-1 transition duration-200 flex flex-col justify-between">
+        <div>
+          <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition">✂️</div>
+          <h3 class="text-base font-bold text-slate-900 group-hover:text-indigo-600 transition">Split PDF Pages</h3>
+          <p class="text-xs text-slate-500 mt-2 leading-relaxed">Extract custom page intervals (e.g. 1-4, 7) into a fresh, isolated PDF document directly in RAM.</p>
+        </div>
+        <div class="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-indigo-600">
+          <span>Open Workspace</span>
+          <span>→</span>
+        </div>
+      </a>
+
+      <!-- Compress Image Card -->
+      <a href="/compress-image.html" data-category="image" data-keywords="image photo img compress reduce size kb optimize jpg png webp" class="tool-card group p-6 rounded-3xl bg-white border border-slate-200 shadow-sm hover:shadow-xl hover:border-indigo-500/50 hover:-translate-y-1 transition duration-200 flex flex-col justify-between">
+        <div>
+          <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition">🗜️</div>
+          <h3 class="text-base font-bold text-slate-900 group-hover:text-indigo-600 transition">Compress Images</h3>
+          <p class="text-xs text-slate-500 mt-2 leading-relaxed">Drastically shrink image KB weight to meet under 50 KB or 100 KB limits for official application forms.</p>
+        </div>
+        <div class="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-indigo-600">
+          <span>Open Workspace</span>
+          <span>→</span>
+        </div>
+      </a>
+
+      <!-- Direct Link to Suite Features -->
+      <div data-category="pdf" data-keywords="pdf security offline private ram" class="tool-card p-6 rounded-3xl bg-slate-50 border border-slate-200 flex flex-col justify-between">
+        <div>
+          <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-2xl mb-4">🛡️</div>
+          <h3 class="text-base font-bold text-slate-900">Zero Cloud Footprint</h3>
+          <p class="text-xs text-slate-500 mt-2 leading-relaxed">No database logs, no remote conversion pipelines, and zero risk of sensitive document exposure.</p>
+        </div>
+        <span class="mt-5 pt-4 border-t border-slate-200 text-[11px] font-bold uppercase text-emerald-700 tracking-wider">Device Isolated</span>
+      </div>
+
+      <div data-category="image" data-keywords="image dimensions resize resolution scale pixels" class="tool-card p-6 rounded-3xl bg-slate-50 border border-slate-200 flex flex-col justify-between">
+        <div>
+          <div class="w-12 h-12 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center text-2xl mb-4">📐</div>
+          <h3 class="text-base font-bold text-slate-900">Precise Formatting</h3>
+          <p class="text-xs text-slate-500 mt-2 leading-relaxed">Modify canvas pixels and aspect ratios for passport, ID, and portal uploads using GPU hardware.</p>
+        </div>
+        <span class="mt-5 pt-4 border-t border-slate-200 text-[11px] font-bold uppercase text-indigo-700 tracking-wider">Browser Powered</span>
+      </div>
+
+      <div data-category="all" data-keywords="speed unlimited fast free no quota" class="tool-card p-6 rounded-3xl bg-slate-50 border border-slate-200 flex flex-col justify-between">
+        <div>
+          <div class="w-12 h-12 rounded-2xl bg-violet-100 text-violet-700 flex items-center justify-center text-2xl mb-4">⚡</div>
+          <h3 class="text-base font-bold text-slate-900">No Paywalls or Quotas</h3>
+          <p class="text-xs text-slate-500 mt-2 leading-relaxed">No monthly credit deductions or rate throttles. Perform unlimited conversions permanently for free.</p>
+        </div>
+        <span class="mt-5 pt-4 border-t border-slate-200 text-[11px] font-bold uppercase text-violet-700 tracking-wider">Unlimited Free</span>
+      </div>
+
+    </div>
+
+    <!-- Editorial Scaffolding Section (Required for AdSense Publisher Guidelines) -->
+    <article id="how-it-works" class="mt-16 bg-white rounded-3xl border border-slate-200/80 p-8 sm:p-12 space-y-8 text-slate-600 text-sm leading-relaxed shadow-sm">
+      <div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mb-4">
+          How Local Client-Side Document Processing Operates
+        </h2>
+        <p>
+          Typical file manipulation tools require users to upload documents to external cloud computing instances. Once received, remote worker servers process the files, convert the streams, and generate a temporary download URL. This architectural model presents significant privacy vulnerabilities and requires reliable high-bandwidth connections to transfer large multi-page documents back and forth.
+        </p>
+        <p class="mt-3">
+          <strong>InstantFileTools</strong> replaces server roundtrips with modern web standards. By executing compiled JavaScript routines via WebAssembly and the HTML5 Canvas API, your local CPU processes byte streams directly inside the browser's temporary heap memory.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4 border-t border-slate-100">
+        <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200/60">
+          <div class="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-sm mb-4">1</div>
+          <h4 class="font-bold text-slate-900 mb-1">Local Memory Buffers</h4>
+          <p class="text-xs text-slate-500 leading-normal">Selected files are read via the Web <code>FileReader</code> API directly as byte arrays in your device's RAM.</p>
+        </div>
+        <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200/60">
+          <div class="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-sm mb-4">2</div>
+          <h4 class="font-bold text-slate-900 mb-1">In-Engine Mutation</h4>
+          <p class="text-xs text-slate-500 leading-normal">Parsing, indexing, page rearrangement, and compression are handled entirely by client-side document compilers.</p>
+        </div>
+        <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200/60">
+          <div class="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-sm mb-4">3</div>
+          <h4 class="font-bold text-slate-900 mb-1">Instant Blob Saving</h4>
+          <p class="text-xs text-slate-500 leading-normal">Modified documents are converted into local Object URLs and saved directly to your downloads folder without cloud transit.</p>
+        </div>
+      </div>
+
+      <!-- FAQ Section -->
+      <div id="faq" class="pt-6 border-t border-slate-100 space-y-4">
+        <h3 class="text-xl font-bold text-slate-900 mb-4">Frequently Asked Questions</h3>
+        <div class="space-y-4">
+          <div>
+            <h4 class="font-semibold text-slate-900">Are my files ever saved on your servers?</h4>
+            <p class="text-xs text-slate-500 mt-1">Never. We maintain no storage databases, file ingestion endpoints, or remote processing queues. If you disconnect your internet after the page loads, all tools continue working completely offline.</p>
+          </div>
+          <div>
+            <h4 class="font-semibold text-slate-900">Why are there no file size limits or subscriptions?</h4>
+            <p class="text-xs text-slate-500 mt-1">Cloud platforms pay expensive server computing and bandwidth bills for every megabyte uploaded, forcing them to impose daily quotas or monthly subscription paywalls. Because InstantFileTools uses your own computer's processor, we have zero compute overhead per user.</p>
+          </div>
+          <div>
+            <h4 class="font-semibold text-slate-900">How do I compress images to under 50 KB for competitive exam or government portals?</h4>
+            <p class="text-xs text-slate-500 mt-1">Visit our dedicated <a href="/compress-image.html" class="text-indigo-600 font-semibold underline">Compress Image</a> utility, adjust the slider to roughly 35%–45%, and click Compress. The file will be downsampled directly to the target KB ceiling.</p>
+          </div>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-slate-200 py-8 text-xs text-slate-500">
+    <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+      <div class="flex items-center space-x-2">
+        <div class="w-6 h-6 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold text-xs">I</div>
+        <span class="font-bold text-slate-800">InstantFileTools</span>
+        <span>— Private Client-Side Utilities</span>
+      </div>
+      <div class="flex space-x-6">
+        <a href="/privacy.html" class="hover:text-indigo-600 transition">Privacy Policy</a>
+        <a href="/terms.html" class="hover:text-indigo-600 transition">Terms of Service</a>
+        <a href="/contact.html" class="hover:text-indigo-600 transition">Contact Us</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Live Search Filter
+    function filterToolsBySearch(term) {
+      const query = term.trim().toLowerCase();
+      const clearBtn = document.getElementById('search-clear-btn');
+      const countLabel = document.getElementById('search-results-count');
+      const cards = document.querySelectorAll('.tool-card');
+
+      clearBtn.classList.toggle('hidden', query.length === 0);
+
+      if (!query) {
+        countLabel.classList.add('hidden');
+        cards.forEach(c => c.classList.remove('hidden'));
+        return;
+      }
+
+      let count = 0;
+      cards.forEach(card => {
+        const keywords = (card.getAttribute('data-keywords') || '').toLowerCase();
+        const category = (card.getAttribute('data-category') || '').toLowerCase();
+        const text = card.innerText.toLowerCase();
+
+        if (keywords.includes(query) || category.includes(query) || text.includes(query)) {
+          card.classList.remove('hidden');
+          count++;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+
+      countLabel.innerText = `Showing ${count} matching tool${count === 1 ? '' : 's'}`;
+      countLabel.classList.remove('hidden');
+    }
+
+    function clearToolSearch() {
+      const input = document.getElementById('tool-search-input');
+      input.value = '';
+      filterToolsBySearch('');
+      input.focus();
+    }
+
+    // Category Tabs
+    function setCategory(cat) {
+      ['all', 'pdf', 'image'].forEach(c => {
+        const btn = document.getElementById('cat-' + c);
+        if (btn) {
+          btn.className = c === cat 
+            ? "px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-white text-indigo-600 shadow-sm transition"
+            : "px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 transition";
+        }
+      });
+
+      document.querySelectorAll('.tool-card').forEach(card => {
+        const cardCat = card.getAttribute('data-category');
+        card.classList.toggle('hidden', cat !== 'all' && cardCat !== cat && cardCat !== 'all');
+      });
+    }
+  </script>
+</body>
+</html>
