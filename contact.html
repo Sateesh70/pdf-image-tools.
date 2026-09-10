@@ -3,35 +3,65 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Contact Us - InstantFileTools</title>
+  <title>Contact Support - InstantFileTools</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>body { font-family: 'Plus Jakarta Sans', sans-serif; }</style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between">
+<body class="bg-[#f8fafc] text-slate-800 min-h-screen flex flex-col justify-between">
 
-  <!-- Header -->
-  <header class="bg-white border-b border-slate-200 py-4 px-6">
-    <div class="max-w-4xl mx-auto flex justify-between items-center">
-      <a href="/" class="text-lg font-extrabold text-slate-900">InstantDoc<span class="text-indigo-600">Tools</span></a>
-      <a href="/" class="text-xs font-semibold text-indigo-600 hover:underline">← Back to Tools</a>
+  <header class="bg-white border-b border-slate-200">
+    <div class="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
+      <a href="/" class="flex items-center space-x-2">
+        <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-extrabold text-sm">I</div>
+        <span class="font-extrabold text-slate-900">InstantFile<span class="text-indigo-600">Tools</span></span>
+      </a>
+      <a href="/" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800">← Back to Tools</a>
     </div>
   </header>
 
-  <!-- Content -->
-  <main class="max-w-xl mx-auto px-6 py-12 flex-1 w-full bg-white my-8 rounded-2xl border border-slate-200 shadow-sm leading-relaxed text-sm space-y-6">
-    <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Contact Us</h1>
-    <p class="text-slate-500 text-xs">Have a question, feedback, or need assistance? Reach out to our team.</p>
+  <main class="max-w-3xl mx-auto px-4 py-12 flex-1 w-full">
+    <div class="bg-white border border-slate-200 rounded-3xl p-8 sm:p-12 shadow-sm space-y-6">
+      <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">Contact Us</h1>
+      <p class="text-sm text-slate-500">
+        Have questions about our client-side tools, feature suggestions, or business inquiries? Drop us a message below or email us directly.
+      </p>
 
-    <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 space-y-3">
-      <p class="font-bold text-slate-800 text-sm">Direct Email Support:</p>
-      <p class="text-indigo-600 font-mono text-sm select-all">support@instantfiletools.online</p>
-      <p class="text-xs text-slate-400">We aim to respond to all inquiries within 24–48 business hours.</p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+        <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl">
+          <p class="text-[11px] font-bold uppercase text-slate-400">Support Email</p>
+          <a href="mailto:support@instantfiletools.online" class="text-sm font-bold text-indigo-600 hover:underline">support@instantfiletools.online</a>
+        </div>
+        <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl">
+          <p class="text-[11px] font-bold uppercase text-slate-400">Response Time</p>
+          <p class="text-sm font-bold text-slate-800">Within 24–48 Business Hours</p>
+        </div>
+      </div>
+
+      <form class="space-y-4 pt-4" onsubmit="event.preventDefault(); document.getElementById('contact-success').classList.remove('hidden'); this.reset();">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Your Name</label>
+          <input type="text" required placeholder="Full Name" class="w-full border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Your Email</label>
+          <input type="email" required placeholder="name@example.com" class="w-full border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Message</label>
+          <textarea rows="4" required placeholder="How can we help?" class="w-full border border-slate-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
+        </div>
+        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 px-6 rounded-xl transition text-sm shadow-md shadow-indigo-200">
+          Send Message
+        </button>
+      </form>
+      <div id="contact-success" class="hidden p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-semibold text-center">
+        Thank you! Your message has been received.
+      </div>
     </div>
   </main>
 
-  <!-- Footer -->
-  <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-400">
+  <footer class="bg-white border-t border-slate-200 py-6 text-xs text-slate-500 text-center">
     © 2026 InstantFileTools. All rights reserved.
   </footer>
 </body>
